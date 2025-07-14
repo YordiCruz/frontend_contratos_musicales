@@ -15,3 +15,11 @@ git push -u origin develop
 ```
 fit flow init
 ```
+### crear una nueva funcionalidad
+
+```
+git flow feature start add-config-rest
+
+git flow feature finish add-config-rest
+
+```

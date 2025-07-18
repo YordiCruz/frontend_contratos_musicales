@@ -1,33 +1,49 @@
-<h1>Ingrese sus credenciales</h1>
-{{ cargando }}
-<h1 *ngIf="cargando">Cargando..</h1>
-<form [formGroup]="loginForm"  (ngSubmit)="funcIngresar()">
-    <label for="">Ingrese su correo</label>
-    <input type="email" formControlName="email">
-    <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched">
-        <small *ngIf="loginForm.controls.email.errors['required']">
+<div class="bg-gray-100 flex justify-center items-center min-h-100">
+  <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+      Ingrese sus credenciales
+    </h1>
+    {{ cargando }}
+    <h1 *ngIf="cargando">Cargando..</h1>
+    <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="funcIngresar()">
+      <div>
+        <label for="e" class="block text-gary-700 ">Ingrese su correo</label>
+        <input type="email" formControlName="email" placeholder="Ingrese su correo" class="w-full px-4 py-2 border rounded-lg"/>
+        <div
+          *ngIf="
+            loginForm.controls.email.errors && loginForm.controls.email.touched
+          "
+        >
+          <small *ngIf="loginForm.controls.email.errors['required']">
             El correo es requerido
-        </small>
-        <small *ngIf="loginForm.controls.email.errors['email']">
+          </small>
+          <small *ngIf="loginForm.controls.email.errors['email']">
+            El correo es invalido
+          </small>
+        </div>
+      </div>
 
-         El correo es invalido
-        </small>
-    </div>
-    <br>
-    <label for="">Ingrese su contraseña</label>
-    <input type="password" formControlName="password">
-        <div *ngIf="loginForm.controls.password.errors && loginForm.controls.password.touched">
-        <small *ngIf="loginForm.controls.password.errors['required']">
+      <div>
+        <label class="block text-gray-700" for="p">Ingrese su contraseña</label>
+        <input type="password" formControlName="password" placeholder="Ingrese su contraseña" class="w-full px-4 py-2 border rounded-lg"/>
+        <div
+          *ngIf="
+            loginForm.controls.password.errors &&
+            loginForm.controls.password.touched
+          "
+        >
+          <small *ngIf="loginForm.controls.password.errors['required']">
             La contraseña es requerido
-        </small>
-        <small *ngIf="loginForm.controls.password.errors['minlength']">
+          </small>
+          <small *ngIf="loginForm.controls.password.errors['minlength']">
+            Minimo 6 caracteres
+          </small>
+        </div>
+      </div>
+        <input type="submit" [disabled]="!loginForm.valid" class="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200">      
+    </form>
 
-         Minimo 6 caracteres
-        </small>
-    </div>
-    <br>
-    <button type="submit" [disabled]="!loginForm.valid">Ingresar</button>
-</form>
-
-{{ loginForm.value.email}}
-{{ loginForm.value.password}}
+    {{ loginForm.value.email }}
+    {{ loginForm.value.password }}
+  </div>
+</div>

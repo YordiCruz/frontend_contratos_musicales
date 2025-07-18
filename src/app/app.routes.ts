@@ -4,35 +4,44 @@ import { Servicios } from './web/servicios/servicios';
 import { Nosotros } from './web/nosotros/nosotros';
 import { Contactos } from './web/contactos/contactos';
 import { Error404 } from './errors/error404/error404';
+import { WebLayout } from './layout/web-layout/web-layout';
 
 export const routes: Routes = [
-    {
+  {
+    path: '',
+    component: WebLayout,
+    children: [
+      {
         path: '',
-        component: Inicio
-    },
-    {
+        component: Inicio,
+      },
+      {
         path: 'servicios',
-        component: Servicios
-    },
-    {
+        component: Servicios,
+      },
+      {
         path: 'nosotros',
-        component: Nosotros
-    },
-    {
+        component: Nosotros,
+      },
+      {
         path: 'contactos',
-        component: Contactos
-    },
-    {
+        component: Contactos,
+      },
+      {
         path: 'auth',
-        loadChildren: () => import('./auth/auth-module').then(au => au.AuthModule)
-    },
-    {
-        path: 'admin',
-        loadChildren: () => import('./admin/admin-module').then(ad => ad.AdminModule)
-    }, 
-    {
-        path: '**',
-        component: Error404
-    }
+        loadChildren: () =>
+          import('./auth/auth-module').then((au) => au.AuthModule),
+      },
+    ],
+  },
 
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin-module').then((ad) => ad.AdminModule),
+  },
+  {
+    path: '**',
+    component: Error404,
+  },
 ];

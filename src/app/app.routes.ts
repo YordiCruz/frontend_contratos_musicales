@@ -5,6 +5,8 @@ import { Nosotros } from './web/nosotros/nosotros';
 import { Contactos } from './web/contactos/contactos';
 import { Error404 } from './errors/error404/error404';
 import { WebLayout } from './layout/web-layout/web-layout';
+import { App } from './app';
+import { AppLayout } from './layout/component/app.layout';
 
 export const routes: Routes = [
   {
@@ -32,13 +34,19 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./auth/auth-module').then((au) => au.AuthModule),
       },
+      
     ],
   },
 
   {
     path: 'admin',
-    loadChildren: () =>
-      import('./admin/admin-module').then((ad) => ad.AdminModule),
+    component: AppLayout,
+    children: [
+      {
+        path: '',  loadChildren: () => import('./admin/admin-module').then((ad) => ad.AdminModule),
+      }
+    ]
+   
   },
   {
     path: '**',

@@ -2,16 +2,29 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing-module';
-import { Perfil } from './perfil/perfil';
-
+import { Perfil } from './components/perfil/perfil';
+import { User } from './components/user/user';
+import { Role } from './components/role/role';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    Perfil
+    Perfil,
+    User,
+    Role,
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    DialogModule,
+    ButtonModule,
+    InputTextModule,
+    TableModule, 
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

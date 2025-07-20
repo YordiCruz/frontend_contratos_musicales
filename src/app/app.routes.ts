@@ -7,6 +7,7 @@ import { Error404 } from './errors/error404/error404';
 import { WebLayout } from './layout/web-layout/web-layout';
 import { App } from './app';
 import { AppLayout } from './layout/component/app.layout';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -45,7 +46,8 @@ export const routes: Routes = [
       {
         path: '',  loadChildren: () => import('./admin/admin-module').then((ad) => ad.AdminModule),
       }
-    ]
+    ],
+    canActivate: [authGuard]
    
   },
   {

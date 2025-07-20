@@ -7,7 +7,7 @@ import { Perfil } from './perfil/perfil';
 
 @NgModule({
   declarations: [
-    Perfil
+    Perfil,
   ],
   imports: [
     CommonModule,

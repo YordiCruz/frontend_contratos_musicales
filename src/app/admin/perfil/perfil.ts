@@ -10,10 +10,15 @@ import { Auth } from '../../core/services/auth';
 export class Perfil {
   authservice = inject(Auth);
 
+  perfil: any= {}
+
   constructor() {
     this.authservice.perfil().subscribe(
       (res) => {
         console.log(res)
+
+        this.perfil = res
+        
       },
       (error) => {
         console.log(error);

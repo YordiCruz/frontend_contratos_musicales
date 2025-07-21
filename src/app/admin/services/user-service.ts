@@ -1,27 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  urlBase = 'https://ventaslaravue.blumbit.net/back/public/api';
+  urlBase =  environment.url_production
 
   http = inject(HttpClient);
 
 
   funListar(){
-    return this.http.get(`${this.urlBase}/user`);
+    return this.http.get(`${this.urlBase}/users`);
 
   }
 
   funGuardar(datos: any){
-    return this.http.post(`${this.urlBase}/user`, datos);
+    return this.http.post(`${this.urlBase}/users`, datos);
 
   }
 
   funModificar(id: number, datos: any){
-    return this.http.put(`${this.urlBase}/user/${id}`, datos);
+    return this.http.put(`${this.urlBase}/users/${id}`, datos);
   }
 
   funEliminar(id:number){

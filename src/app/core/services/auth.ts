@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 interface Credencial{
   email: string,
@@ -11,8 +12,8 @@ interface Credencial{
 })
 export class Auth {
 
-  urlBase = "https://ventaslaravue.blumbit.net/back/public/api/v1";
-
+  urlBase = environment.url_production
+  
   http = inject(HttpClient);
   constructor() {
     

@@ -1,30 +1,38 @@
-<div class="card">
-    <div class="text-center">
-        <h1>Mi Perfil</h1>
+@if (loading()) {
+        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
 
-    </div>
-    <div class="flex justify-center mt-4">
-        <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
-           @if (perfil.imagen) {
-               <img [src]="perfil?.imagen" alt="" class="w-full h-full object-cover rounded-full">
-
-            } @else {
-                <span class="text-2xl text-gray-500 font-semibold">C</span>
-                
-           }
+}
+@else {
+    <div class="card">
+        <div class="text-center">
+            <h1>Perfil de Usuario</h1>
+    
         </div>
-
+        
+        <div class="flex justify-center mt-4">
+            <div class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center">
+               @if (perfil().imagen) {
+                   <img [src]="perfil()?.imagen" alt="" class="w-full h-full object-cover rounded-full">
+    
+                } @else {
+                    <span class="text-2xl text-gray-500 font-semibold">C</span>
+                    
+               }
+            </div>
+    
+        </div>
+    
+        <div class="mt-6 space-y-4">
+            <div>
+                <h3 class="text-sm text-gray-600">Nombre Completo</h3>
+                <p class="text-lg font-semibold text-gray-800">{{ perfil()?.name }}</p>
+            </div>
+             <div>
+                <h3 class="text-sm text-gray-600">Correo Electronico</h3>
+                <p class="text-lg font-semibold text-gray-800">{{ perfil()?.email }}</p>
+            </div>
+        </div>
+    
     </div>
 
-    <div class="mt-6 space-y-4">
-        <div>
-            <h3 class="text-sm text-gray-600">Nombre Completo</h3>
-            <p class="text-lg font-semibold text-gray-800">{{ perfil?.name }}</p>
-        </div>
-         <div>
-            <h3 class="text-sm text-gray-600">Correo Electronico</h3>
-            <p class="text-lg font-semibold text-gray-800">{{ perfil?.email }}</p>
-        </div>
-    </div>
-
-</div>
+}

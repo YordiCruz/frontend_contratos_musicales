@@ -1,0 +1,57 @@
+<h1>lista de categorias</h1>
+
+<div class="card" >
+    <p-button (click)="newCategoryDialog()" label="Nuevo Categoria" />
+<p-dialog header="Datos de Categoria" [modal]="true" [(visible)]="visiblecate" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-8">Ingrese datos de categoria.</span>
+    
+    <form [formGroup]="cateForm">
+        {{ cateForm.value | json }}
+        <div class="flex items-center gap-4 mb-4">
+            <label for="nombre" class="font-semibold w-24">Nombre</label>
+            <input pInputText id="nombre" class="flex-auto" autocomplete="off" formControlName="nombre" />
+        </div>
+        <div class="flex items-center gap-4 mb-8">
+            <label for="descri" class="font-semibold w-24">Descripcion</label>
+            <input pInputText id="descri" class="flex-auto" autocomplete="off" formControlName="descripcion" />
+        </div>
+    
+        <div class="flex justify-end gap-2">
+            <p-button label="Cancelar" severity="secondary" (click)="visiblecate.set(false)" />
+            <p-button label="Guardar" (click)="funGuardarCate()"/>
+        </div>
+
+
+    </form>
+    
+</p-dialog>
+</div>
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of categorias(); track $index) {
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>
+                    <!-- <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="funEditar(item)" /> -->
+                     <!-- <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="funEliminar(item)" /> -->
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+{{ categorias () | json }}

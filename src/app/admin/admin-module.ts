@@ -12,12 +12,16 @@ import { TableModule } from 'primeng/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CategoriaComponent } from './components/inventario/categoria-component/categoria-component';
+import { ProductoComponent } from './components/inventario/producto-component/producto-component';
 
 @NgModule({
   declarations: [
     Perfil,
     User,
     Role,
+    CategoriaComponent,
+    ProductoComponent,
   ],
   imports: [
     CommonModule,

@@ -16,9 +16,12 @@ export class Perfil {
     this.loading.set(true);
     this.authservice.perfil().subscribe(
       (res) => {
-        console.log(res)
+        console.log("Esto es: ", JSON.stringify(res, null, 2));
+        console.log("Esto: ", res);
+
+
         //this.perfil = res
-        this.perfil.set(res)
+        this.perfil.set(res);
         this.loading.set(false);
       },
       (error) => {

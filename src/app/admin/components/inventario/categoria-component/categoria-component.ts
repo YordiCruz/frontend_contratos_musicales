@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { CategoriaService } from '../../../services/categoria-service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-categoria-component',
@@ -12,14 +13,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './categoria-component.html',
   styleUrl: './categoria-component.scss'
 })
-export class CategoriaComponent implements OnInit {
+export class CategoriaComponent implements OnInit{
+
   categorias = signal<CategoriaInterface[]>([]);
+  visibleDiCategoria = signal<boolean>(false);
 
   categoriaService = inject(CategoriaService);
 
-  visiblecate = signal<boolean>(false);
-
-  cateForm = new FormGroup({
+  categoriaForm = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     descripcion: new FormControl(''),
   });
@@ -28,30 +29,27 @@ export class CategoriaComponent implements OnInit {
     this.listar();
   }
 
-  listar(): void {
+  listar(): void{
     this.categoriaService.index().subscribe(
-    (data: CategoriaInterface[]) => {
-      this.categorias.set(data);
-    },
-    (error: any) => {
-      console.log(error);
-    }
-  )
-  }
-
-  newCategoryDialog(){
-    this.visiblecate.set(true);
-  }
-
-  funGuardarCate(){
-    let data: CategoriaInterface = {nombre: this.cateForm.value.nombre+"", descripcion: this.cateForm.value.descripcion + ""}
-    this.categoriaService.store(data).subscribe(
-      (data: CategoriaInterface) => {
-        this.listar();
-        this.visiblecate.set(false);
+      (data: CategoriaInterface[]) => {
+        this.categorias.set(data);
       },
       (error: any) => {
-        console.log(error);
+
+      }
+    );
+  }
+
+  funMostrarDialog(){
+    this.visibleDiCategoria.set(true);
+  }
+
+  funGuardarCategoria(){
+    let data: CategoriaInterface = {nombre: this.categoriaForm.value.nombre+"", descripcion: this.categoriaForm.value.descripcion+"" };
+    this.categoriaService.store(data).subscribe(
+      (res: CategoriaInterface) => {
+        this.listar();
+        this.visibleDiCategoria.set(false);
       }
     )
   }

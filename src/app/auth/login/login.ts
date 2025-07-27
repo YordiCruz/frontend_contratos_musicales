@@ -47,10 +47,11 @@ export class Login {
 
     this.authservice.login({ email, password }).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log("Estaaa: ", JSON.stringify(res, null, 2));
+
         this.cargando = false;
 
-        localStorage.setItem('access_token', res.access_token);
+        localStorage.setItem('access_token', res.acces_token);
 
         this.router.navigate(['/admin/perfil']);
 

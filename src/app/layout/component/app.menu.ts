@@ -42,7 +42,7 @@ export class AppMenu {
              {
                 label: 'Inventarios',
                 items: [
-                    { label: 'Categorías', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
+                    { label: 'Categorias', icon: 'pi pi-fw pi-check-square', routerLink: ['/admin/categoria'] },
                     { label: 'Productos', icon: 'pi pi-box', class: 'rotated-icon', routerLink: ['/admin/producto'] },
                     { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
                     

@@ -1,5 +1,5 @@
 @if (loading()) {
-        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
+    <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
 
 }
 @else {
@@ -25,7 +25,7 @@
         <div class="mt-6 space-y-4">
             <div>
                 <h3 class="text-sm text-gray-600">Nombre Completo</h3>
-                <p class="text-lg font-semibold text-gray-800">{{ perfil()?.name }}</p>
+                <p class="text-lg font-semibold text-gray-800">{{ perfil()?.username }}</p>
             </div>
              <div>
                 <h3 class="text-sm text-gray-600">Correo Electronico</h3>

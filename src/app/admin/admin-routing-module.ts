@@ -19,7 +19,7 @@ const routes: Routes = [
     component: Role
   }, 
   {
-    path: '',
+    path: 'categoria',
     component: CategoriaComponent
   }
 ];

@@ -4,6 +4,10 @@ import { Perfil } from './components/perfil/perfil';
 import { User } from './components/user/user';
 import { Role } from './components/role/role';
 import { CategoriaComponent } from './components/inventario/categoria-component/categoria-component';
+import { ProductoComponent } from './components/inventario/producto-component/producto-component';
+import { Inventario } from './components/inventario/inventario';
+import { AlmacenComponent } from './components/inventario/almacen-component/almacen-component';
+import { SucursalComponent } from './components/inventario/sucursal-component/sucursal-component';
 
 const routes: Routes = [
   {
@@ -19,9 +23,28 @@ const routes: Routes = [
     component: Role
   }, 
   {
-    path: 'categoria',
-    component: CategoriaComponent
+    path: 'inventario',
+    component: Inventario,
+    children: [
+      {
+        path: 'categoria',
+        component: CategoriaComponent
+      },
+      {
+        path: 'producto',
+        component: ProductoComponent
+      },
+      {
+        path: 'almacenes',
+        component: AlmacenComponent
+      },
+      {
+        path: 'sucursales',
+        component: SucursalComponent
+      },
+    ]
   }
+  
 ];
 
 @NgModule({

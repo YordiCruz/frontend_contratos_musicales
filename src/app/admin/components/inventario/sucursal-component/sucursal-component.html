@@ -1,0 +1,25 @@
+
+<div class="card">
+    <h1>Gestión Sucursales</h1>
+
+    <p-table [value]="sucursales()" stripedRows [tableStyle]="{'min-width': '50rem'}">
+        <ng-template #header>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Ciudad</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-sucursal>
+            <tr>
+                <td>{{sucursal.id}}</td>
+                <td>{{sucursal.nombre}}</td>
+                <td>{{sucursal.direccion}}</td>
+                <td>{{sucursal.ciudad}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    
+</div>
+{{sucursales() | json}}

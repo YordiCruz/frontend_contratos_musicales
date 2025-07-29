@@ -42,9 +42,10 @@ export class AppMenu {
              {
                 label: 'Inventarios',
                 items: [
-                    { label: 'Categorias', icon: 'pi pi-fw pi-check-square', routerLink: ['/admin/categoria'] },
-                    { label: 'Productos', icon: 'pi pi-box', class: 'rotated-icon', routerLink: ['/admin/producto'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
+                    { label: 'Categorias', icon: 'pi pi-fw pi-check-square', routerLink: ['/admin/inventario/categoria'] },
+                    { label: 'Productos', icon: 'pi pi-box', class: 'rotated-icon', routerLink: ['/admin/inventario/producto'] },
+                    { label: 'Almacenes', icon: 'pi pi-fw pi-table', routerLink: ['/admin/inventario/almacenes'] },
+                    { label: 'Sucursales', icon: 'pi pi-fw pi-table', routerLink: ['/admin/inventario/sucursales'] },
                     
                 ]
             },

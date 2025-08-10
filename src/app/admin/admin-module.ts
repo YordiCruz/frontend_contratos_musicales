@@ -10,9 +10,9 @@ import { ProductoComponent } from './components/inventario/producto-component/pr
 import { Inventario } from './components/inventario/inventario';
 import { AlmacenComponent } from './components/inventario/almacen-component/almacen-component';
 import { SucursalComponent } from './components/inventario/sucursal-component/sucursal-component';
-import { NotaCompraComponent } from './components/movimientos/nota-compra-component/nota-compra-component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {PrimengModule} from '../primeng/primeng-module'
+import {PrimengModule} from '../primeng/primeng-module';
+import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component'
 @NgModule({
   declarations: [
     Perfil,
@@ -23,7 +23,7 @@ import {PrimengModule} from '../primeng/primeng-module'
     Inventario,
     AlmacenComponent,
     SucursalComponent,
-    NotaCompraComponent,
+    NotaVentaComponent,
   ],
   imports: [
     CommonModule,

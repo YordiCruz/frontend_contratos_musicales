@@ -37,7 +37,6 @@ const modulos = [
     DatePickerModule,
     CheckboxModule,
     FileUploadModule,
-
 ]
 
 @NgModule({

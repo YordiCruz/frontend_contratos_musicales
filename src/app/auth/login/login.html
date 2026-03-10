@@ -8,7 +8,7 @@
     <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="funcIngresar()">
       <div>
         <label for="e" class="block text-gary-700 ">Ingrese su correo</label>
-        <input type="email" formControlName="email" placeholder="Ingrese su correo" class="w-full px-4 py-2 border rounded-lg"/>
+        <input type="email" formControlName="email" placeholder="Ingrese su username" class="w-full px-4 py-2 border rounded-lg"/>
         <div
           *ngIf="
             loginForm.controls.email.errors && loginForm.controls.email.touched

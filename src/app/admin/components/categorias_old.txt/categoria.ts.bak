@@ -1,0 +1,17 @@
+import { Component, Injectable } from '@angular/core';
+import {  ListCategorias } from "./list/list";
+
+@Injectable({
+  providedIn: 'root'
+})
+
+@Component({
+  selector: 'app-categoria',
+  templateUrl: './categoria.html',
+  styleUrls: [],
+  imports: [ListCategorias]
+})
+export class Categoria {
+
+  
+}

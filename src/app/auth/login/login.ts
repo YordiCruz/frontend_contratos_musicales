@@ -24,7 +24,7 @@ export class Login {
 
   // FormGroup
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.email, Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.required]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
@@ -38,43 +38,40 @@ export class Login {
   });
 
   funcIngresar() {
-    // con el if valido si el formulario es valido y recien hace la peticion a la api
-    if (this.loginForm.invalid) return;
+  if (this.loginForm.invalid) return;
 
-    this.cargando = true;
+  this.cargando = true;
 
-    const { email, password } = this.loginForm.value;
+  const { email, password } = this.loginForm.value;
 
-    this.authservice.login({ email, password }).subscribe(
-      (res: any) => {
-        console.log("Estaaa: ", JSON.stringify(res, null, 2));
+  this.authservice.login({ email, password }).subscribe(
+    (res: any) => {
+      this.cargando = false;
 
-        this.cargando = false;
+      // Guardar token y rol
+      localStorage.setItem('access_token', res.access_token);
+      localStorage.setItem('role', res.user.role);
 
-        localStorage.setItem('access_token', res.acces_token);
+      // Normalizar rol
+      const role = res.user.role.toLowerCase();
 
+      // Redirección según rol
+      if (role === 'admin') {
         this.router.navigate(['/admin/perfil']);
-
-      },
-      (error) => {
-        console.log(error);
-        this.cargando = false;
-        alert("Error de Credenciales");
+      } else if (role === 'cliente') {
+        this.router.navigate(['/cliente/dashboard']);
+      } else {
+        alert('Rol no reconocido');
       }
-    );
+    },
+    (error) => {
+      console.log(error);
+      this.cargando = false;
+      alert("Error de Credenciales");
+    }
+  );
+}
 
-    // otra forma
 
-    // this.authservice
-    //   .login({ email, password })
-    //   .subscribe({next: (res) => {
-    //     this.cargando = false;
-    //     console.log(res);
-        
 
-    //   }, error: (error) => {
-    //     this.cargando = false;
-    //     console.log(error.error);
-    //   }});
-  }
 }

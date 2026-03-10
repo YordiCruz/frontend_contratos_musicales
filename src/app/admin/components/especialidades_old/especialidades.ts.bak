@@ -1,0 +1,17 @@
+import { Component, Injectable } from '@angular/core';
+import {  ListEspecialidades } from "./list/list";
+
+@Injectable({
+  providedIn: 'root'
+})
+
+@Component({
+  selector: 'app-especialidades',
+  templateUrl: './especialidades.html',
+  styleUrls: [],
+  imports: [ ListEspecialidades ]
+})
+export class Especialidades {
+
+  
+}

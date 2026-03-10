@@ -20,7 +20,7 @@ export class Auth {
   }
 
   login( credenciales: any ){
-    return this.http.post(this.urlBase + '/auth/login', credenciales);
+    return this.http.post(this.urlBase + '/admin-auth/login', credenciales);
 
   }
 
@@ -30,7 +30,7 @@ export class Auth {
   }
 
   perfil(){
-    return this.http.get(`${this.urlBase}/auth/profile`);
+    return this.http.get(`${this.urlBase}/admin-auth/profile`);
   }
   
 }

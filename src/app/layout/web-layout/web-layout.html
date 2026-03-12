@@ -6,28 +6,43 @@
         <a routerLink="/" class="text-white hover:text-gray-200">Inicio</a>
       </li>
       <li>
-        <a routerLink="/nosotros" class="text-white hover:text-gray-200">Nosotros</a>
+        <a routerLink="/nosotros" class="text-white hover:text-gray-200"
+          >Nosotros</a
+        >
       </li>
       <li>
-        <a routerLink="/contactos" class="text-white hover:text-gray-200">Contactos</a>
+        <a routerLink="/contactos" class="text-white hover:text-gray-200"
+          >Contactos</a
+        >
       </li>
       <li>
-        <a routerLink="/servicios" class="text-white hover:text-gray-200">Servicios</a>
+        <a routerLink="/servicios" class="text-white hover:text-gray-200"
+          >Servicios</a
+        >
       </li>
-      <li>
-        <a routerLink="/client/auth/login" class="text-white hover:text-gray-200">Ingresar</a>
-      </li>
-      <li>
-        <a routerLink="/auth/register" class="text-white hover:text-gray-200">Registrarme</a>
-      </li>
+
+      <!-- Aquí es donde controlas login/registro -->
+      <ng-container *ngIf="!authService.isLoggedIn()">
+        <li>
+          <a routerLink="/client/client-auth/login" class="text-white">Ingresar</a>
+        </li>
+        <li>
+          <a routerLink="/auth/register" class="text-white">Registrarme</a>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="authService.isLoggedIn()">
+        <li><a routerLink="/client/perfil" class="text-white">Mi perfil</a></li>
+       <li>
+          <a (click)="authService.logout()" class="text-white cursor-pointer">Cerrar sesión</a>
+       </li>
+      </ng-container>
     </ul>
   </div>
 </nav>
 
 <section class="py-12">
-    <div class="mx-auto px-4">
-        <router-outlet/>
-
-    </div>
+  <div class="mx-auto px-4">
+    <router-outlet />
+  </div>
 </section>
-

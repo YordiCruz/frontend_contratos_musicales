@@ -6,7 +6,8 @@ import { Contactos } from './web/contactos/contactos';
 import { Error404 } from './errors/error404/error404';
 import { WebLayout } from './layout/web-layout/web-layout';
 import { AppLayout } from './layout/component/app.layout';
-import { authGuard } from './core/guards/auth-guard';
+import { AdminAuthGuard } from './admin/guards/admin-auth-guard';
+import { ClientAuthGuard } from './client/guards/client-auth-guard';
 
 export const routes: Routes = [
   // 🔹 Web pública
@@ -30,6 +31,8 @@ export const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('./client/client-module').then((m) => m.ClientModule),
+        canActivate: [ClientAuthGuard],
+
       },
       {
         path: 'client-auth',
@@ -48,14 +51,16 @@ export const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('./admin/admin-module').then((m) => m.AdminModule),
+        canActivate: [AdminAuthGuard],
       },
-      {
+      
+    ],
+
+  },
+  {
         path: 'admin-auth',
         loadChildren: () =>
           import('./admin/auth/admin-auth-module').then((m) => m.AdminAuthModule),
-      },
-    ],
-    canActivate: [authGuard],
   },
 
   // 🔹 Error 404

@@ -44,24 +44,25 @@ export class Login {
   const { email, password } = this.loginForm.value;
 
   // Si este login es para cliente
- 
-  this.authservice.login({ email, password }).subscribe(
+
+  this.authservice.login({ email: email ?? '' , password: password ?? '' }).subscribe(
   (res: any) => {
     localStorage.setItem('access_token', res.access_token);
+    localStorage.setItem('role', res.user.role.toLowerCase());
 
-    const role = res.user.role.toLowerCase();
-
-    if (role === 'admin') {
+    if (res.user.role.toLowerCase() === 'admin') {
       this.router.navigate(['/admin/perfil']);
     } else {
       alert('Este login es solo para administradores');
     }
   },
   (error) => {
-    this.loginForm.reset(); // limpia los campos
+    this.loginForm.reset();
     alert("Error de Credenciales");
   }
 );
+ 
+
 }
 
 

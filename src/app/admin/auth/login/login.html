@@ -1,49 +1,45 @@
-<div class="bg-gray-100 flex justify-center items-center min-h-100">
-  <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+<div class="bg-gray-100 flex justify-center items-center min-h-screen">
+  <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
     <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
       Ingrese sus credenciales
     </h1>
-    {{ cargando }}
-    <h1 *ngIf="cargando">Cargando..</h1>
+
     <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="funcIngresar()">
       <div>
-        <label for="e" class="block text-gary-700 ">Ingrese su correo</label>
-        <input type="email" formControlName="email" placeholder="Ingrese su username" class="w-full px-4 py-2 border rounded-lg"/>
-        <div
-          *ngIf="
-            loginForm.controls.email.errors && loginForm.controls.email.touched
-          "
-        >
-          <small *ngIf="loginForm.controls.email.errors['required']">
-            El correo es requerido
-          </small>
-          <small *ngIf="loginForm.controls.email.errors['email']">
-            El correo es invalido
-          </small>
+        <label for="e" class="block text-gray-700 mb-1">Correo</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Ingrese su correo"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched" class="text-red-500 text-sm mt-1">
+          <small *ngIf="loginForm.controls.email.errors['required']">El correo es requerido</small>
+          <small *ngIf="loginForm.controls.email.errors['email']">El correo es inválido</small>
         </div>
       </div>
 
       <div>
-        <label class="block text-gray-700" for="p">Ingrese su contraseña</label>
-        <input type="password" formControlName="password" placeholder="Ingrese su contraseña" class="w-full px-4 py-2 border rounded-lg"/>
-        <div
-          *ngIf="
-            loginForm.controls.password.errors &&
-            loginForm.controls.password.touched
-          "
-        >
-          <small *ngIf="loginForm.controls.password.errors['required']">
-            La contraseña es requerido
-          </small>
-          <small *ngIf="loginForm.controls.password.errors['minlength']">
-            Minimo 6 caracteres
-          </small>
+        <label for="p" class="block text-gray-700 mb-1">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Ingrese su contraseña"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <div *ngIf="loginForm.controls.password.errors && loginForm.controls.password.touched" class="text-red-500 text-sm mt-1">
+          <small *ngIf="loginForm.controls.password.errors['required']">La contraseña es requerida</small>
+          <small *ngIf="loginForm.controls.password.errors['minlength']">Mínimo 6 caracteres</small>
         </div>
       </div>
-        <input type="submit" [disabled]="!loginForm.valid" class="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200">      
-    </form>
 
-    {{ loginForm.value.email }}
-    {{ loginForm.value.password }}
+      <button
+        type="submit"
+        [disabled]="!loginForm.valid"
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition duration-200 disabled:opacity-50"
+      >
+        Ingresar
+      </button>
+    </form>
   </div>
 </div>

@@ -44,9 +44,10 @@ export class Login {
   const { email, password } = this.loginForm.value;
 
   // Si este login es para cliente
- this.authservice.login2({ email, password }).subscribe(
+ this.authservice.login2({ email: email ?? '', password: password ?? '' }).subscribe(
   (res: any) => {
     localStorage.setItem('access_token', res.access_token);
+    localStorage.setItem('role', res.user.role);
 
     const role = res.user.role.toLowerCase();
 

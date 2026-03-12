@@ -11,6 +11,7 @@ import { SucursalComponent } from './components/inventario/sucursal-component/su
 import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component';
 
 const routes: Routes = [
+  
   {
     path: 'perfil',
     component: Perfil

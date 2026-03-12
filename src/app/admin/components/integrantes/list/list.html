@@ -1,0 +1,27 @@
+<p-table [value]="integrantes()" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nombre</th>
+          <th>Especialidad</th>
+          <th>Tarifa</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-integ>
+        <tr>
+          <td>{{ integ.user?.username }}</td>
+          <td>{{ integ.especialidad }}</td>
+          <td>{{ integ.tarifa_base_hora }}</td>
+          <td>
+            <p-button pButton icon="pi pi-pencil" (click)="editar(integ)" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <app-integrantes-form 
+      *ngIf="dialogVisible" 
+      [integrante]="selectedIntegrante"
+      (cerrar)="cerrarDialog()" 
+      (guardado)="onGuardado()"
+      ></app-integrantes-form>

@@ -17,7 +17,7 @@ export class Perfil {
     this.authservice.perfil().subscribe(
       (res) => {
         console.log("Esto es: ", JSON.stringify(res, null, 2));
-        console.log("Esto: ", res);
+        //console.log("Esto: ", res);
 
 
         //this.perfil = res

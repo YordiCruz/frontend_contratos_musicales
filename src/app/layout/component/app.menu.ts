@@ -57,9 +57,9 @@ export class AppMenu {
                 routerLink: ['/pages'],
                 items: [
                     {
-                        label: 'Landing',
+                        label: 'Ventas',
                         icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
+                        routerLink: ['/admin/movimientos/nota/venta'],
                     },
                   
                 ]

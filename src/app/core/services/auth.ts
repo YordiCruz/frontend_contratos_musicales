@@ -13,6 +13,8 @@ interface Credencial{
 export class Auth {
 
   urlBase = environment.url_production
+
+  urlclient = environment.url_cliente
   
   http = inject(HttpClient);
   constructor() {
@@ -20,7 +22,12 @@ export class Auth {
   }
 
   login( credenciales: any ){
-    return this.http.post(this.urlBase + '/auth/login', credenciales);
+    return this.http.post(this.urlBase + '/admin-auth/login', credenciales);
+
+  }
+
+   login2( credenciales: any ){
+    return this.http.post(this.urlclient + '/client-auth/login', credenciales);
 
   }
 
@@ -30,7 +37,11 @@ export class Auth {
   }
 
   perfil(){
-    return this.http.get(`${this.urlBase}/auth/profile`);
+    return this.http.get(`${this.urlBase}/admin-auth/profile`);
+  }
+
+   perfil2(){
+    return this.http.get(`${this.urlclient}/client-auth/profile`);
   }
   
 }

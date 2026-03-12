@@ -1,0 +1,29 @@
+<p-dialog header="Formulario Integrante" [(visible)]="visible" [modal]="true" [style]="{ width: '400px' }">
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="field">
+          <label>Especialidad</label>
+          <input pInputText formControlName="especialidad" />
+        </div>
+        <div class="field">
+          <label>Tarifa por hora</label>
+          <input pInputText type="number" formControlName="tarifa_base_hora" />
+        </div>
+        <div class="field">
+          <label>Experiencia</label>
+          <input pInputText formControlName="experiencia" />
+        </div>
+        <div class="field">
+          <label>Descripción</label>
+          <textarea pInputTextarea formControlName="descripcion"></textarea>
+        </div>
+        <div class="field">
+          <label>Fecha ingreso</label>
+          <p-calendar formControlName="fecha_ingreso" showIcon></p-calendar>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-3">
+          <button pButton type="button" label="Cancelar" class="p-button-secondary" (click)="cerrar.emit()"></button>
+          <button pButton type="submit" label="Guardar" [disabled]="form.invalid"></button>
+        </div>
+      </form>
+    </p-dialog>

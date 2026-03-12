@@ -62,6 +62,10 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+              "host": "0.0.0.0",
+              "allowedHosts": ["mall-advise-taylor-jobs.trycloudflare.com "]
+            },
           "configurations": {
             "production": {
               "buildTarget": "frontend_inventario_angular:build:production"

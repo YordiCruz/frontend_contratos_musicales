@@ -1,0 +1,35 @@
+<div class="card">
+  <h1>Lista de Especialidades</h1>
+  <p-button (click)="openCreateEspecialidad()" label="Nueva Especialidad" icon="pi pi-plus"></p-button>
+
+  <p-table [value]="especialidades()" [loading]="loading()">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Nivel</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-esp>
+      <tr>
+        <td>{{ esp.nombre }}</td>
+        <td>{{ esp.descripcion || '—' }}</td>
+        <td>{{ esp.nivel_dificultad }}</td>
+        <td>{{ esp.categoria?.nombre || '—' }}</td>
+        <td>
+          <p-button icon="pi pi-pencil" (click)="openEditEspecialidad(esp)"></p-button>
+          <p-button icon="pi pi-trash" severity="danger" (click)="deleteEspecialidad(esp.id_especialidad)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- modal -->
+  <app-especialidad-form
+    [(visible)]="especialidadModalVisible"
+    [especialidadSeleccionada]="especialidadSeleccionada"
+    (saved)="loadEspecialidades()">
+  </app-especialidad-form>
+</div>

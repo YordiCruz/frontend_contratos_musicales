@@ -8,6 +8,7 @@ import { ProductoComponent } from './components/inventario/producto-component/pr
 import { Inventario } from './components/inventario/inventario';
 import { AlmacenComponent } from './components/inventario/almacen-component/almacen-component';
 import { SucursalComponent } from './components/inventario/sucursal-component/sucursal-component';
+import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,11 @@ const routes: Routes = [
         component: SucursalComponent
       },
     ]
+  },
+
+  {
+    path: 'movimientos/nota/venta',
+    component: NotaVentaComponent
   }
   
 ];

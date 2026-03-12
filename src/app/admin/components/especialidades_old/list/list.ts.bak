@@ -1,0 +1,57 @@
+import { Component, OnInit, signal } from '@angular/core';
+import { EspecialidadFormComponent } from '../form/form.ts.bak';
+import { PrimengModule } from '../../../../primeng/primeng-module';
+import { Especialidad } from '../../../interfaces/especialidad';
+import { EspecialidadesService } from '../../../services/especialidades-service';
+
+@Component({
+  selector: 'app-list-especialidades',
+  standalone: true,
+  imports: [PrimengModule, EspecialidadFormComponent],
+  templateUrl: './list.html'
+})
+export class ListEspecialidades implements OnInit {
+  especialidades = signal<Especialidad[]>([]);
+  loading = signal(true);
+
+  especialidadSeleccionada: Especialidad | null = null;
+  especialidadModalVisible = false;
+
+  constructor(private especialidadesService: EspecialidadesService) {}
+
+  ngOnInit(): void {
+    this.loadEspecialidades();
+  }
+
+  loadEspecialidades() {
+    this.loading.set(true);
+    this.especialidadesService.getAll().subscribe({
+      next: (res: any[]) => {
+        this.especialidades.set(res);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.especialidades.set([]);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  openCreateEspecialidad() {
+    this.especialidadSeleccionada = null;
+    this.especialidadModalVisible = true;
+  }
+
+  openEditEspecialidad(esp: Especialidad) {
+    this.especialidadSeleccionada = esp;
+    this.especialidadModalVisible = true;
+  }
+
+  deleteEspecialidad(id: string) {
+    if (confirm('¿Seguro que deseas eliminar esta especialidad?')) {
+      this.especialidadesService.delete(id).subscribe(() => {
+        this.especialidades.set(this.especialidades().filter(e => e.id_especialidad !== id));
+      });
+    }
+  }
+}

@@ -6,7 +6,6 @@ import { tap } from 'rxjs';
 export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
   
   const token = localStorage.getItem('access_token');
-
   const router = inject(Router);
 
   
@@ -23,8 +22,17 @@ export const authInterceptorInterceptor: HttpInterceptorFn = (req, next) => {
         return;
       }
 
-      localStorage.removeItem('access_token');
-      router.navigate(['/auth/login']);
+     if (error instanceof HttpErrorResponse && error.status === 401) {
+  localStorage.removeItem('access_token');
+
+  if (req.url.includes('/admin')) {
+    router.navigate(['/admin/admin-auth/login']);
+  } else if (req.url.includes('/client')) {
+    router.navigate(['/client/client-auth/login']);
+  } else {
+    router.navigate(['/']); // fallback
+  }
+}
      }
     })
   

@@ -3,7 +3,7 @@
     <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
       Ingrese sus credenciales
     </h1>
-    {{ cargando }}
+    <!-- {{ cargando }} -->
     <h1 *ngIf="cargando">Cargando..</h1>
     <form class="space-y-5" [formGroup]="loginForm" (ngSubmit)="funcIngresar()">
       <div>
@@ -14,6 +14,8 @@
             loginForm.controls.email.errors && loginForm.controls.email.touched
           "
         >
+        <div *ngIf="loginForm.controls.password.errors && loginForm.controls.password.touched" class="text-red-500 text-xm mt-1">
+
           <small *ngIf="loginForm.controls.email.errors['required']">
             El correo es requerido
           </small>
@@ -21,6 +23,8 @@
             El correo es invalido
           </small>
         </div>
+        </div>
+
       </div>
 
       <div>
@@ -32,18 +36,23 @@
             loginForm.controls.password.touched
           "
         >
+        <div *ngIf="loginForm.controls.password.errors && loginForm.controls.password.touched" class="text-red-500 text-xm mt-1">
+
           <small *ngIf="loginForm.controls.password.errors['required']">
             La contraseña es requerido
           </small>
           <small *ngIf="loginForm.controls.password.errors['minlength']">
             Minimo 6 caracteres
           </small>
+      
         </div>
       </div>
+      </div>
+    
         <input type="submit" [disabled]="!loginForm.valid" class="w-full bg-blue-500 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200">      
     </form>
 
-    {{ loginForm.value.email }}
-    {{ loginForm.value.password }}
+    <!-- {{ loginForm.value.email }}
+    {{ loginForm.value.password }} -->
   </div>
 </div>

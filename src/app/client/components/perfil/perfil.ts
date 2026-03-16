@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Auth } from '../../../core/services/auth';
+import { ClientAuthService } from '../../../core/services/client-auth';
 
 @Component({
   selector: 'app-perfil',
@@ -8,7 +8,7 @@ import { Auth } from '../../../core/services/auth';
   styleUrl: './perfil.scss'
 })
 export class Perfil {
-  authservice = inject(Auth);
+  authservice = inject(ClientAuthService);
 
   perfil = signal<any> ({});
   loading = signal<boolean>(false);

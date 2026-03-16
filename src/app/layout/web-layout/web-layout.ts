@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { AdminRoutingModule } from "../../admin/admin-routing-module";
-import { Auth } from '../../core/services/auth';
 import { CommonModule } from '@angular/common';
+import { ClientAuthService } from '../../core/services/client-auth';
 
 @Component({
   selector: 'app-web-layout',
@@ -13,6 +13,6 @@ import { CommonModule } from '@angular/common';
 })
 export class WebLayout {
 
-  authService = inject(Auth);
+  authService = inject(ClientAuthService);
 
 }

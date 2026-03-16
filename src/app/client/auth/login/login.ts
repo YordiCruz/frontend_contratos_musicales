@@ -5,8 +5,9 @@ import {
   Validators,
   FormBuilder,
 } from '@angular/forms';
-import { Auth } from '../../../core/services/auth';
 import { Router } from '@angular/router';
+import { ClientAuthService } from '../../../core/services/client-auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -16,13 +17,13 @@ import { Router } from '@angular/router';
 })
 export class Login {
   constructor(private formBuilder: FormBuilder) {}
+
   fb = inject(FormBuilder);
   router = inject(Router);
-  authservice = inject(Auth);
+  authservice = inject(ClientAuthService);
 
   cargando = false;
 
-  // FormGroup
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.required]),
     password: new FormControl('', [
@@ -31,40 +32,72 @@ export class Login {
     ]),
   });
 
-  // FormBuilder
-  // loginForm2 = this.fb.group({
-  //   email: ['', [Validators.email, Validators.required]],
-  //   password: ['', [Validators.required, Validators.minLength(6)]],
-  // });
+  funcIngresar() {
 
- funcIngresar() {
-  if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) return;
 
-  this.cargando = true;
-  const { email, password } = this.loginForm.value;
+    this.cargando = true;
 
-  // Si este login es para cliente
- this.authservice.login2({ email: email ?? '', password: password ?? '' }).subscribe(
-  (res: any) => {
-    localStorage.setItem('access_token', res.access_token);
-    localStorage.setItem('role', res.user.role);
+    const { email, password } = this.loginForm.value;
 
-    const role = res.user.role.toLowerCase();
+    this.authservice.login2({
+      email: email ?? '',
+      password: password ?? '',
+    }).subscribe({
 
-    if (role === 'cliente') {
-      this.router.navigate(['/client/perfil']);
-    } else {
-      alert('Este login es solo para clientes');
-    }
-  },
-  (error) => {
-    this.loginForm.reset(); // limpia los campos
+      next: (res: any) => {
 
-    alert("Error de Credenciales");
+        this.cargando = false;
+
+        const role = res.user.role.toLowerCase();
+
+        if (role !== 'cliente') {
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Acceso no permitido',
+            text: 'Este login es solo para clientes',
+            confirmButtonText: 'Entendido'
+          });
+
+          return;
+        }
+
+        localStorage.setItem('access_token', res.access_token);
+        localStorage.setItem('refresh_token', res.refresh_token);
+        localStorage.setItem('role', role);
+
+        // Toast de éxito
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: 'Bienvenido',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        this.router.navigate(['/client/perfil']);
+      },
+
+      error: (err) => {
+
+        this.cargando = false;
+
+        console.log("LOGIN ERROR:", err);
+
+        this.loginForm.reset();
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de credenciales',
+          text: 'El correo o la contraseña son incorrectos.',
+          confirmButtonText: 'Intentar nuevamente'
+        });
+
+      }
+
+    });
   }
-);
-}
-
-
 
 }

@@ -1,9 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserService } from '../../services/user-service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CreateUserDto, UserInterface } from '../../interfaces/user-interface';
+import { CreateUserData, CreateUserDto, passworduser, UserInterface } from '../../interfaces/user-interface';
 import Swal from 'sweetalert2';
-import { PrimeIcons } from 'primeng/api';
 
 @Component({
   selector: 'app-user',
@@ -14,93 +13,65 @@ import { PrimeIcons } from 'primeng/api';
 export class User implements OnInit {
   userService = inject(UserService);
   visible = false;
+  visibleeditar = false;
 
   users = signal<UserInterface[]>([]);
   user_id: string | null = null;
 
   rolesOptions: { id: string; nombre: string; descripcion: string }[] = [];
 
+  // FORMULARIO PARA CREAR
+  userForm = new FormGroup({
+    persona: new FormGroup({
+      nombre: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+      apellido: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+      telefono: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          Validators.pattern(/^[0-9]+$/)
+        ]
+      }),
+      documento_identidad: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.pattern(/^\d{8}$/)]
+      }),
+      email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] })
+    }),
 
-userForm = new FormGroup({
-  persona: new FormGroup({
-    nombre: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required]
-    }),
-    apellido: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required]
-    }),
-    telefono: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(20),
-        Validators.pattern(/^[0-9]+$/)
-      ]
-    }),
-    documento_identidad: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.pattern(/^\d{8}$/) // exactamente 8 dígitos
-      ]
-    }),
-    email: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.email]
+    user: new FormGroup({
+      email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+      password_hash: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
+      roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
+      estado: new FormControl<string>('activo', { nonNullable: true })
     })
-  }),
-  user: new FormGroup({
-    email: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.email]
-    }),
-    password_hash: new FormControl<string>('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(8)]
-    }),
-    roles: new FormControl<string[]>([], {
-      nonNullable: true,
-      validators: [Validators.required]
-    }),
-    estado: new FormControl<string>('activo', { nonNullable: true })
-  })
-});
+  });
 
+  // FORMULARIO PARA EDITAR
   userForm2 = new FormGroup({
-  email: new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.email]
-  }),
-  password: new FormControl<string>('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.minLength(8)]
-  }),
-  roles: new FormControl<string[]>([], {
-    nonNullable: true,
-    validators: [Validators.required]
-  }),
-  estado: new FormControl<string>('activo', { nonNullable: true })
-});
+    email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
+    estado: new FormControl<string>('activo', { nonNullable: true })
+  });
+
+  passwordUserForm = new FormGroup({
+    newpassword: new FormControl<string>('', {validators: [ Validators.minLength(8)] })
+  })
 
 
-getRoles(roles: any[]): string {
-  return roles?.map(r => r.nombre).join(', ');
-}
 
   ngOnInit(): void {
     this.getUsers();
-     this.loadRoles();
+    this.loadRoles();
   }
 
-   loadRoles() {
+  loadRoles() {
     this.userService.funListarRoles().subscribe((roles) => {
       this.rolesOptions = roles;
     });
   }
-
 
   getUsers() {
     this.userService.funListar().subscribe((res: UserInterface[]) => {
@@ -112,176 +83,205 @@ getRoles(roles: any[]): string {
     this.visible = true;
   }
 
+  // GUARDAR O EDITAR
 funGuardarUser() {
   if (this.user_id) {
-    const payload = this.userForm2.value as CreateUserDto;
-   
+    // --------------------------
+    //   EDITAR USUARIO
+    // --------------------------
+    const payload: CreateUserData = {
+      email: this.userForm2.value.email!,
+      roles: this.userForm2.value.roles!,
+    };
+
+ 
     this.userService.funModificar(this.user_id, payload).subscribe(() => {
-      const rolesIds = payload.user.roles || [];
-      
+      const rolesIds = payload.roles;
+
+  const newPass = this.passwordUserForm.value.newpassword?.trim();
+  console.log('Valor raw del formulario:', this.passwordUserForm.value);
+console.log('newPass:', newPass);
+
+if (newPass && newPass.length >= 8) {
+  const payloadpass: passworduser = { newpassword: newPass };
+  this.userService.funModificarpass(this.user_id!, payloadpass).subscribe(() => {
+    console.log('Contraseña actualizada');
+  });
+} else {
+  console.log('No se actualiza la contraseña');
+}
       if (rolesIds.length) {
-        
         this.userService.assignRoles(this.user_id!, { rolesIds }).subscribe(() => {
           this.getUsers();
           this.visibleeditar = false;
           this.userForm2.reset();
           Swal.fire({ title: 'Usuario actualizado!', icon: 'success' });
+
+          // AHORA SÍ RESETEA
+          this.user_id = null;
         });
       } else {
         this.getUsers();
         this.visibleeditar = false;
         this.userForm2.reset();
         Swal.fire({ title: 'Usuario actualizado!', icon: 'success' });
+
+        // AHORA SÍ RESETEA
+        this.user_id = null;
       }
     });
+
   } else {
+    // --------------------------
+    //   CREAR USUARIO
+    // --------------------------
     const payload = this.userForm.value as CreateUserDto;
 
     this.userService.funGuardar(payload).subscribe((nuevoUsuario: UserInterface) => {
       const rolesIds = payload.user.roles || [];
+
       if (rolesIds.length) {
         this.userService.assignRoles(nuevoUsuario.id, { rolesIds }).subscribe(() => {
           this.getUsers();
           this.visible = false;
           this.userForm.reset();
           Swal.fire({ title: 'Usuario creado!', icon: 'success' });
+
+          this.user_id = null;
         });
       } else {
         this.getUsers();
         this.visible = false;
         this.userForm.reset();
         Swal.fire({ title: 'Usuario creado!', icon: 'success' });
+
+        this.user_id = null;
       }
     });
   }
-  this.user_id = null;
 }
-
-  visibleeditar = false;
-   funEditar(user: UserInterface) {
+  // CARGAR DATOS PARA EDITAR
+  funEditar(user: UserInterface) {
     this.user_id = user.id;
+
     this.userForm2.patchValue({
       email: user.email,
-      password: '',
-      roles: user.roles.map(r => r.id), // 👈 selecciona por ID
+      roles: user.roles.map(r => r.id),
       estado: user.estado
     });
+
     this.visibleeditar = true;
   }
 
-
-
-funEliminar(user: UserInterface) {
-  console.log('Usuario recibido en funEliminar:', user);
-
-  Swal.fire({
-    title: '¿Inactivar usuario?',
-    text: `Se marcará como inactivo a ${user.persona?.nombre ?? '(sin nombre)'} ${user.persona?.apellido ?? '(sin apellido)'}`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, inactivar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.userService.funModificar2(user.id, { estado: 'inactivo' }).subscribe(() => {
-        this.getUsers();
-        Swal.fire({ title: 'Usuario inactivado!', icon: 'success' });
-      });
-    }
-  });
-}
-
-// activar usuario 
-
-funActivar(user: UserInterface) {
-  Swal.fire({
-    title: '¿Reactivar usuario?',
-    text: `Se volverá a activar a ${user.persona?.nombre} ${user.persona?.apellido}`,
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, activar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.userService.activar(user.id).subscribe(() => {
-        this.getUsers(); // refresca la lista
-        Swal.fire({ title: 'Usuario reactivado!', icon: 'success' });
-      });
-    }
-  });
-}
-
-
-  //color para estados activo inactivo
-  getEstadoSeverity(estado: string) {
-  switch (estado.toLowerCase()) {
-    case 'activo':
-      return 'success';   // verde
-    case 'inactivo':
-      return 'danger';    // rojo
-    default:
-      return 'secondary'; // gris por defecto
+  // INACTIVAR
+  funEliminar(user: UserInterface) {
+    Swal.fire({
+      title: '¿Inactivar usuario?',
+      text: `Se marcará como inactivo a ${user.persona?.nombre} ${user.persona?.apellido}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, inactivar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.funModificar2(user.id, { estado: 'inactivo' }).subscribe(() => {
+          this.getUsers();
+          Swal.fire({ title: 'Usuario inactivado!', icon: 'success' });
+        });
+      }
+    });
   }
-}
 
-//paginacion de usuarios 
+  // ACTIVAR
+  funActivar(user: UserInterface) {
+    Swal.fire({
+      title: '¿Reactivar usuario?',
+      text: `Se volverá a activar a ${user.persona?.nombre} ${user.persona?.apellido}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.activar(user.id).subscribe(() => {
+          this.getUsers();
+          Swal.fire({ title: 'Usuario reactivado!', icon: 'success' });
+        });
+      }
+    });
+  }
 
-first: number = 0;
-rows: number = 10;
+  // ESTILOS
+  getEstadoSeverity(estado: string) {
+    switch (estado.toLowerCase()) {
+      case 'activo': return 'success';
+      case 'inactivo': return 'danger';
+      default: return 'secondary';
+    }
+  }
 
-next() {
-  this.first = this.first + this.rows;
-}
+  // PAGINACIÓN
+  first: number = 0;
+  rows: number = 10;
 
-prev() {
-  this.first = this.first - this.rows;
-}
+  next() { this.first = this.first + this.rows; }
+  prev() { this.first = this.first - this.rows; }
+  reset() { this.first = 0; }
 
-reset() {
-  this.first = 0;
-}
+  pageChange(event: any) {
+    this.first = event.first;
+    this.rows = event.rows;
+  }
 
-pageChange(event: any) {
-  this.first = event.first;
-  this.rows = event.rows;
-}
+  isLastPage(): boolean {
+    return this.users ? this.first + this.rows >= this.users.length : true;
+  }
 
-isLastPage(): boolean {
-  return this.users ? this.first + this.rows >= this.users.length : true;
-}
+  isFirstPage(): boolean {
+    return this.users() ? this.first === 0 : true;
+  }
 
-isFirstPage(): boolean {
-  return this.users() ? this.first === 0 : true;
-}
-
-
-// ordenamiento de estado 
-customSort(event: any) {
+  // ORDENAMIENTO
+ customSort(event: any) {
   event.data.sort((a: any, b: any) => {
-    let value1 = a[event.field];
-    let value2 = b[event.field];
+    const field = event.field;
 
-    if (event.field === 'estado') {
-      // Definimos el mapa con claves estrictas
-      const orderMap: Record<'Activo' | 'Inactivo', number> = {
-        Activo: 1,
-        Inactivo: 2
+    // --- Resolver campos anidados ---
+    const resolveField = (obj: any, path: string) =>
+      path.split('.').reduce((acc, key) => acc?.[key], obj);
+
+    let value1 = resolveField(a, field);
+    let value2 = resolveField(b, field);
+
+    // --- Orden especial para estado ---
+    if (field === 'estado') {
+      const orderMap: Record<string, number> = {
+        activo: 1,
+        inactivo: 2
       };
-
-      // Forzamos a que value1 y value2 sean de tipo 'Activo' | 'Inactivo'
-      value1 = orderMap[value1 as 'Activo' | 'Inactivo'] ?? 99;
-      value2 = orderMap[value2 as 'Activo' | 'Inactivo'] ?? 99;
+      value1 = orderMap[value1?.toLowerCase()] ?? 99;
+      value2 = orderMap[value2?.toLowerCase()] ?? 99;
     }
 
-    if (event.field === 'ultimo_login') {
+    // --- Orden para fechas ---
+    if (field === 'ultimo_login') {
       value1 = new Date(value1).getTime();
       value2 = new Date(value2).getTime();
     }
 
-    let result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+    // --- Normalizar strings ---
+    if (typeof value1 === 'string') value1 = value1.toLowerCase();
+    if (typeof value2 === 'string') value2 = value2.toLowerCase();
+
+    let result = 0;
+    if (value1 < value2) result = -1;
+    else if (value1 > value2) result = 1;
+
     return event.order * result;
   });
 }
 
-
+  getRoles(roles: any[]): string {
+  return roles?.map(r => r.nombre).join(', ');
+}
 }

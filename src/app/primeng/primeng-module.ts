@@ -17,6 +17,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
+import {TagModule} from 'primeng/tag';
+import { MultiSelectModule } from 'primeng/multiselect';
+import {ButtonGroup} from 'primeng/buttongroup';
+import {Divider} from 'primeng/divider';
+
+
+
 
 
 const modulos = [
@@ -37,6 +44,10 @@ const modulos = [
     DatePickerModule,
     CheckboxModule,
     FileUploadModule,
+    TagModule,
+    MultiSelectModule,
+    ButtonGroup,
+    Divider
 ]
 
 @NgModule({

@@ -1,92 +1,111 @@
+<!-- FORMULARIO REGISTRAR USUARIO -->
 <p-dialog
-  header="Datos de Usuario"
+  header="Registrar Usuario"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: '25rem' }"
+  [style]="{ width: '32rem' }"
 >
-  <span class="p-text-secondary block mb-8">Ingrese sus datos.</span>
+  <span class="text-gray-500 block mb-4">Complete los datos del usuario.</span>
 
-  <form [formGroup]="userForm">
-  <div formGroupName="persona" class="flex flex-col gap-4 mb-4">
-    <!-- Nombre, Apellido, Documento, Teléfono, Email -->
-    <div class="flex items-center gap-4">
-      <label for="nombre" class="font-semibold w-24">Nombre</label>
-      <input pInputText id="nombre" class="flex-auto" formControlName="nombre" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="apellido" class="font-semibold w-24">Apellido</label>
-      <input pInputText id="apellido" class="flex-auto" formControlName="apellido" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="documento" class="font-semibold w-24">Documento</label>
-      <input pInputText id="documento" class="flex-auto" formControlName="documento_identidad" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="telefono" class="font-semibold w-24">Teléfono</label>
-      <input pInputText id="telefono" class="flex-auto" formControlName="telefono" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="emailPersona" class="font-semibold w-24">Correo</label>
-      <input pInputText id="emailPersona" class="flex-auto" formControlName="email" />
-    </div>
-  </div>
+  <form [formGroup]="userForm" class="p-fluid">
 
-  <div formGroupName="user" class="flex flex-col gap-4 mb-4">
-    <div class="flex items-center gap-4">
-      <label for="emailUser" class="font-semibold w-24">Correo Usuario</label>
-      <input pInputText id="emailUser" class="flex-auto" formControlName="email" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="pass" class="font-semibold w-24">Contraseña</label>
-      <input type="password" pInputText id="pass" class="flex-auto" formControlName="password_hash" />
-    </div>
-    <div class="flex items-center gap-4">
-      <label for="roles" class="font-semibold w-24">Roles</label>
-      <p-multiSelect
-        id="roles"
-        [options]="rolesOptions"
-        formControlName="roles"
-        optionLabel="nombre"
-        optionValue="id"
-        placeholder="Seleccione roles"
-        appendTo="body"
-        [filter]="false"
-        [showToggleAll]="false"
-        class="flex-auto"
-      >
-      </p-multiSelect>
-    </div>
-  </div>
+    <!-- SECCIÓN PERSONA -->
+    <p-divider align="left">
+      <span class="text-sm font-semibold text-gray-600">Datos Personales</span>
+    </p-divider>
 
-  <div class="flex justify-end gap-2">
-    <p-button label="Cancelar" severity="secondary" (click)="visible = false" />
-    <p-button label="Guardar" (click)="funGuardarUser()" [disabled]="!userForm.valid" />
-  </div>
-</form>
+    <div formGroupName="persona" class="flex flex-col gap-y-4">
+
+      <div class="flex items-center gap-x-4">
+        <label for="nombre" class="w-24 font-semibold">Nombre</label>
+        <input pInputText id="nombre" formControlName="nombre" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="apellido" class="w-24 font-semibold">Apellido</label>
+        <input pInputText id="apellido" formControlName="apellido" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="documento" class="w-24 font-semibold">Documento</label>
+        <input pInputText id="documento" formControlName="documento_identidad" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="telefono" class="w-24 font-semibold">Teléfono</label>
+        <input pInputText id="telefono" formControlName="telefono" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="emailPersona" class="w-24 font-semibold">Correo</label>
+        <input pInputText id="emailPersona" formControlName="email" class="flex-1" />
+      </div>
+
+    </div>
+
+    <!-- SECCIÓN USUARIO -->
+    <p-divider align="left">
+      <span class="text-sm font-semibold text-gray-600">Datos de Usuario</span>
+    </p-divider>
+
+    <div formGroupName="user" class="flex flex-col gap-y-4">
+
+      <div class="flex items-center gap-x-4">
+        <label for="emailUser" class="w-24 font-semibold">Correo Usuario</label>
+        <input pInputText id="emailUser" formControlName="email" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="pass" class="w-24 font-semibold">Contraseña</label>
+        <input type="password" pInputText id="pass" formControlName="password_hash" class="flex-1" />
+      </div>
+
+      <div class="flex items-center gap-x-4">
+        <label for="roles" class="w-24 font-semibold">Roles</label>
+        <p-multiSelect
+          id="roles"
+          [options]="rolesOptions"
+          formControlName="roles"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccione roles"
+          appendTo="body"
+          [filter]="false"
+          [showToggleAll]="false"
+          class="flex-1"
+        ></p-multiSelect>
+      </div>
+
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button label="Cancelar" severity="secondary" (click)="visible = false" />
+      <p-button label="Guardar" (click)="funGuardarUser()" [disabled]="!userForm.valid" />
+    </div>
+
+  </form>
 </p-dialog>
 
+<!-- FORMULARIO EDITAR USUARIO -->
 <p-dialog
   header="Editar Usuario"
   [modal]="true"
   [(visible)]="visibleeditar"
-  [style]="{ width: '25rem' }"
+  [style]="{ width: '30rem' }"
 >
-  <form [formGroup]="userForm2">
-    <div class="mb-4">
-      <label for="email">Correo</label>
-      <input pInputText id="email" formControlName="email" />
+  <form [formGroup]="userForm2" class="p-fluid">
+
+    <p-divider align="left">
+      <span class="text-sm font-semibold text-gray-600">Datos del Usuario</span>
+    </p-divider>
+
+    <div class="flex items-center gap-x-4 mb-4">
+      <label for="email" class="w-24 font-semibold">Correo</label>
+      <input pInputText id="email" formControlName="email" class="flex-1" />
     </div>
-    <div class="mb-4">
-      <label for="newPass">Nueva contraseña</label>
-      <input
-        type="password"
-        pInputText
-        id="newPass"
-        formControlName="password"
-      />
-    </div>
-    <div class="mb-4">
-      <label for="roles">Roles</label>
+
+    <div class="flex items-center gap-x-4 mb-4">
+      <label for="roles" class="w-24 font-semibold">Roles</label>
       <p-multiSelect
         id="roles"
         [options]="rolesOptions"
@@ -94,23 +113,36 @@
         optionLabel="nombre"
         optionValue="id"
         placeholder="Seleccione roles"
-      >
-      </p-multiSelect>
+        class="flex-1"
+      ></p-multiSelect>
     </div>
-    <div class="flex justify-end gap-2">
-      <p-button
-        label="Cancelar"
-        severity="secondary"
-        (click)="visibleeditar = false"
-      />
-      <p-button
-        label="Guardar"
-        (click)="funGuardarUser()"
-        [disabled]="!userForm2.valid"
+
+  </form>
+
+  <p-divider align="left">
+    <span class="text-sm font-semibold text-gray-600">Cambiar Contraseña</span>
+  </p-divider>
+
+  <form [formGroup]="passwordUserForm" class="p-fluid">
+    <div class="flex items-center gap-x-4 mb-4">
+      <label for="newPass" class="w-24 font-semibold">Nueva contraseña</label>
+      <input
+        type="password"
+        pInputText
+        id="newPass"
+        formControlName="newpassword"
+        placeholder="Dejar vacío si no desea cambiar"
+        class="flex-1"
       />
     </div>
   </form>
+
+  <div class="flex justify-end gap-2 mt-4">
+    <p-button label="Cancelar" severity="secondary" (click)="visibleeditar = false" />
+    <p-button label="Guardar" (click)="funGuardarUser()" [disabled]="!userForm2.valid" />
+  </div>
 </p-dialog>
+
 
 <div class="card">
   <div class="flex items-center justify-between mb-6">

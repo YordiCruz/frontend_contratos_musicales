@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AdminRoutingModule } from './admin-routing-module';
 import { Perfil } from './components/perfil/perfil';
-import { User } from './components/user/user';
 import { Role } from './components/role/role';
 import { CategoriaComponent } from './components/inventario/categoria-component/categoria-component';
 import { ProductoComponent } from './components/inventario/producto-component/producto-component';
@@ -13,6 +11,7 @@ import { SucursalComponent } from './components/inventario/sucursal-component/su
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {PrimengModule} from '../primeng/primeng-module';
 import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component'
+import { User } from './components/user/user';
 @NgModule({
   declarations: [
     Perfil,

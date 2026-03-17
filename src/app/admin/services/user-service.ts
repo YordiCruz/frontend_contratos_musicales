@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { CreateUserDto, UserInterface } from '../interfaces/user-interface';
+import { CreateUserData, CreateUserDto, passworduser, UserInterface } from '../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,12 @@ export class UserService {
   }
 
   // modificar usuario (payload CreateUserDto)
-  funModificar(id: string, datos: CreateUserDto): Observable<UserInterface> {
-    return this.http.patch<UserInterface>(`${this.urlBase}/users/${id}`, datos);
+  funModificar(id: string, datos: CreateUserData): Observable<CreateUserData> {
+    return this.http.patch<CreateUserData>(`${this.urlBase}/users/${id}/editar`, datos);
+  }
+
+  funModificarpass(id: string, datos: passworduser): Observable<passworduser> {
+    return this.http.patch<passworduser>(`${this.urlBase}/users/${id}/passwordUsers`, datos);
   }
 
  funModificar2(id: string, datos: Partial<UserInterface>): Observable<UserInterface> {

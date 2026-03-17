@@ -29,10 +29,15 @@ export interface UserInterface {
 
 export interface CreateUserData {
   email: string;
-  password_hash: string;
   estado?: string;
   roles: string[]; // aquí solo IDs
 }
+
+export interface passworduser {
+  newpassword: string;
+  
+}
+
 
 export interface CreatePersona {
   nombre: string;

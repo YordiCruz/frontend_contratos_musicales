@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Auth } from '../../../core/services/auth';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 @Component({
   selector: 'app-login',
@@ -31,40 +32,40 @@ export class Login {
     ]),
   });
 
-  // FormBuilder
-  // loginForm2 = this.fb.group({
-  //   email: ['', [Validators.email, Validators.required]],
-  //   password: ['', [Validators.required, Validators.minLength(6)]],
-  // });
+  funcIngresar() {
+    if (this.loginForm.invalid) return;
 
- funcIngresar() {
-  if (this.loginForm.invalid) return;
+    this.cargando = true;
+    const { email, password } = this.loginForm.value;
 
-  this.cargando = true;
-  const { email, password } = this.loginForm.value;
+    this.authservice.login({ email: email ?? '', password: password ?? '' })
+      .subscribe(
+        (res: any) => {
+          this.cargando = false;
 
-  // Si este login es para cliente
+          // Guardar tokens y rol
+          localStorage.setItem('access_token', res.access_token);
+          localStorage.setItem('role', res.user.role.toLowerCase());
 
-  this.authservice.login({ email: email ?? '' , password: password ?? '' }).subscribe(
-  (res: any) => {
-    localStorage.setItem('access_token', res.access_token);
-    localStorage.setItem('role', res.user.role.toLowerCase());
+          // Redirigir según rol
+          if (res.user.role.toLowerCase() === 'admin') {
+            this.router.navigate(['/admin/perfil']);
+          } else {
+            this.router.navigate(['/client/perfil']);
+          }
+        },
+        (error) => {
+          this.cargando = false;
+          this.loginForm.reset();
 
-    if (res.user.role.toLowerCase() === 'admin') {
-      this.router.navigate(['/admin/perfil']);
-    } else {
-      alert('Este login es solo para administradores');
-    }
-  },
-  (error) => {
-    this.loginForm.reset();
-    alert("Error de Credenciales");
+          // Usando SweetAlert2
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de Credenciales',
+            text: 'El correo o la contraseña son incorrectos. Intenta de nuevo.',
+            confirmButtonText: 'Aceptar',
+          });
+        }
+      );
   }
-);
- 
-
-}
-
-
-
 }

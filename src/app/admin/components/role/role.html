@@ -1,1 +1,55 @@
-<p>role works!</p>
+<div class="card">
+  <h1 class="text-3xl font-bold mb-4">Lista de Roles</h1>
+
+  <p-table
+    #dt1
+    [value]="roles()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [customSort]="true"
+    (sortFunction)="customSort($event)"
+    [tableStyle]="{ 'min-width': '40rem' }"
+  >
+    <ng-template pTemplate="header" >
+
+      <tr>
+        <th>#</th>
+        <th >
+          <div class="flex items-center gap-2">
+            Rol
+          </div>
+        </th>
+
+        <th>
+          <div class="flex items-center gap-2">
+            Descripción
+          </div>
+        </th>
+         <th>
+          <div class="flex items-center gap-2">
+            Permisos
+          </div>
+        </th>
+
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-r let-i="rowIndex">
+      <tr>
+        <td>{{ i+1 }}</td>
+        <td>{{ r.nombre }}</td>
+        <td>{{ r.descripcion }}</td>
+        <td>
+        <p-tag
+          *ngFor="let p of r.permissions"
+          [value]="p.nombre"
+          severity="info"
+          class="mr-2"
+        ></p-tag>
+      </td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

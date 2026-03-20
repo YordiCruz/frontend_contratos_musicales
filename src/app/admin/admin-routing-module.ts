@@ -10,6 +10,7 @@ import { AlmacenComponent } from './components/inventario/almacen-component/alma
 import { SucursalComponent } from './components/inventario/sucursal-component/sucursal-component';
 import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component';
 import { Integrantes } from './components/integrantes/integrantes';
+import { Especialidades } from './components/especialidades/especialidades';
 
 const routes: Routes = [
   
@@ -29,6 +30,12 @@ const routes: Routes = [
     path: 'integrantes',
     component: Integrantes
   },
+
+  {
+    path: 'especialidades',
+    component: Especialidades
+  },
+
   {
     path: 'inventario',
     component: Inventario,

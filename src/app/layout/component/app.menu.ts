@@ -36,6 +36,8 @@ export class AppMenu {
                     { label: 'Usuarios', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/user'] },
                     { label: 'Roles y Permisos', icon: 'pi pi-fw pi-check-square', routerLink: ['/admin/role'] },
                     { label: 'Integrantes', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/integrantes'] },
+                    { label: 'Especialidades', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/especialidades'] },
+
 
                 ]
             },

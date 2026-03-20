@@ -39,6 +39,8 @@ export class AppMenu {
                     { label: 'Especialidades', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/especialidades'] },
                     { label: 'Reemplazos', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/reemplazos'] },
                     { label: 'Personas', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/personas'] },
+                    { label: 'Clientes', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/clientes'] },
+
 
 
 

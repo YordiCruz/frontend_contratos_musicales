@@ -65,6 +65,7 @@ telefono: new FormControl('', [
 
   cargarIntegrantes() {
     this.integranteService.listar().subscribe((res) => {
+      console.log('DATA:', res); 
       this.integrantes.set(res);
     });
   }

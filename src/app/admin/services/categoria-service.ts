@@ -13,7 +13,7 @@ export class CategoriaService {
   http = inject(HttpClient)
 
   index(): Observable<CategoriaInterface[]>{
-    return this.http.get<CategoriaInterface[]>(`${this.apiUrl}/categorias`)
+    return this.http.get<CategoriaInterface[]>(`${this.apiUrl}/categorias-especialidads`)
   }
 
   store(datos: CategoriaInterface): Observable<CategoriaInterface>{

@@ -1,9 +1,31 @@
+import { Especialidad } from "./especialidad";
+
 export interface IntegranteInterface {
   id: string;
-  id_usuario: string;
-  especialidad: string;
   tarifa_base_hora: string;
-  experiencia: string;
-  descripcion: string;
+  moneda: string;
   fecha_ingreso: string;
+  estado: string;
+
+  persona: {
+    id: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    documento_identidad: string;
+  };
+
+  especialidades: Especialidad[]; // 👈 CORRECTO
+}
+
+
+
+export interface Persona {
+  id: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono: string;
+  documento_identidad: string;
 }

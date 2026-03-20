@@ -1,15 +1,18 @@
 export interface Especialidad {
-  id_especialidad?: string;
+  id: string;                     // viene como "id"
   nombre: string;
-  descripcion: string | null;
-  nivel_dificultad: number;
-  id_categoria?: string; // opcional
+  descripcion?: string | null;
+  estado: string;
+
+  id_categoria?: string;          // útil para crear/editar
+
   categoria?: {
-    id_categoria: string;
+    id: string;                   // backend usa "id", NO "id_categoria"
     nombre: string;
-    descripcion: string;
-    icono: string | null;
-    creadoEn: string;
-    actualizadoEn: string;
-  };
+    icono?: string | null;
+    estado: string;
+  } | null;
+
+  creado_en: string;              // backend envía Date → frontend usa string
+  actualizado_en: string;
 }

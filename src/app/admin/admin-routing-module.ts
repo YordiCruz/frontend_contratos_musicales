@@ -9,6 +9,7 @@ import { Inventario } from './components/inventario/inventario';
 import { AlmacenComponent } from './components/inventario/almacen-component/almacen-component';
 import { SucursalComponent } from './components/inventario/sucursal-component/sucursal-component';
 import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component';
+import { Integrantes } from './components/integrantes/integrantes';
 
 const routes: Routes = [
   
@@ -24,6 +25,10 @@ const routes: Routes = [
     path: 'role',
     component: Role
   }, 
+   {
+    path: 'integrantes',
+    component: Integrantes
+  },
   {
     path: 'inventario',
     component: Inventario,

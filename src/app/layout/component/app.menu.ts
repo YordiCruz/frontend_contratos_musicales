@@ -38,6 +38,8 @@ export class AppMenu {
                     { label: 'Integrantes', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/integrantes'] },
                     { label: 'Especialidades', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/especialidades'] },
                     { label: 'Reemplazos', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/reemplazos'] },
+                    { label: 'Personas', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/personas'] },
+
 
 
 

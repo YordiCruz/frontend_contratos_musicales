@@ -12,6 +12,7 @@ import { NotaVentaComponent } from './components/movimientos/nota-venta-componen
 import { Integrantes } from './components/integrantes/integrantes';
 import { Especialidades } from './components/especialidades/especialidades';
 import { Reemplazos } from './components/reemplazos/reemplazos';
+import { Personas } from './components/personas/personas';
 
 const routes: Routes = [
   
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'reemplazos',
     component: Reemplazos
+  },
+  {
+    path: 'personas',
+    component: Personas
   },
 
   {

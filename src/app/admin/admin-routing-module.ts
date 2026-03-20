@@ -11,6 +11,7 @@ import { SucursalComponent } from './components/inventario/sucursal-component/su
 import { NotaVentaComponent } from './components/movimientos/nota-venta-component/nota-venta-component';
 import { Integrantes } from './components/integrantes/integrantes';
 import { Especialidades } from './components/especialidades/especialidades';
+import { Reemplazos } from './components/reemplazos/reemplazos';
 
 const routes: Routes = [
   
@@ -34,6 +35,10 @@ const routes: Routes = [
   {
     path: 'especialidades',
     component: Especialidades
+  },
+  {
+    path: 'reemplazos',
+    component: Reemplazos
   },
 
   {

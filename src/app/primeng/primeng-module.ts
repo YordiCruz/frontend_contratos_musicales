@@ -21,6 +21,7 @@ import {TagModule} from 'primeng/tag';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {ButtonGroup} from 'primeng/buttongroup';
 import {Divider} from 'primeng/divider';
+import {Chip} from 'primeng/chip'
 
 
 
@@ -47,7 +48,8 @@ const modulos = [
     TagModule,
     MultiSelectModule,
     ButtonGroup,
-    Divider
+    Divider,
+    Chip,
 ]
 
 @NgModule({

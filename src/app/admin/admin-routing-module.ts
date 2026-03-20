@@ -13,6 +13,7 @@ import { Integrantes } from './components/integrantes/integrantes';
 import { Especialidades } from './components/especialidades/especialidades';
 import { Reemplazos } from './components/reemplazos/reemplazos';
 import { Personas } from './components/personas/personas';
+import { Clientes } from './components/clientes/clientes';
 
 const routes: Routes = [
   
@@ -44,6 +45,10 @@ const routes: Routes = [
   {
     path: 'personas',
     component: Personas
+  },
+   {
+    path: 'clientes',
+    component: Clientes
   },
 
   {

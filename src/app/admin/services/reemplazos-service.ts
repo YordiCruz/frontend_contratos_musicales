@@ -1,0 +1,42 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { IntegranteInterface } from '../interfaces/integrante-interface';
+import { environment } from '../../../environments/environment';
+import { Especialidad } from '../interfaces/especialidad';
+
+@Injectable({ providedIn: 'root' })
+export class ReemplazosService {
+  private readonly api = `${environment.url_production}/reemplazos`;
+  private readonly urlbase = `${environment.url_production}`;
+
+
+  constructor(private http: HttpClient) {}
+
+  completarDatosIntegrante(userId: string, data: any): Observable<any> {
+    return this.http.patch(`${this.api}/completar/${userId}`, data);
+  }
+  listar(): Observable<IntegranteInterface[]> {
+    return this.http.get<IntegranteInterface[]>(this.api);
+  }
+
+    listarEspecialidades(): Observable<Especialidad[]> {
+    return this.http.get<Especialidad[]>(`${this.urlbase}/especialidades`);
+  }
+
+   asignarMultiples(id: string, dto: any): Observable<any> {
+  return this.http.post(`${this.api}/${id}/especialidades/multiples`, dto);
+}
+
+  crear(data: any): Observable<any> {
+    return this.http.post(this.api, data);
+  }
+
+  editar(id: string, data: any): Observable<any> {
+    return this.http.patch(`${this.api}/${id}`, data);
+  }
+
+  eliminar(id: string): Observable<any> {
+    return this.http.delete(`${this.api}/${id}`);
+  }
+}

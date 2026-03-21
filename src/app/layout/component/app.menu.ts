@@ -40,6 +40,8 @@ export class AppMenu {
                     { label: 'Reemplazos', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/reemplazos'] },
                     { label: 'Personas', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/personas'] },
                     { label: 'Clientes', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/clientes'] },
+                    { label: 'Eventos', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/eventos'] },
+
 
 
 

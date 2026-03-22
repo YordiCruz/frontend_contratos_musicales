@@ -1,0 +1,376 @@
+
+<!-- DIALOG PARA MOSTRAR IMAGEN -->
+<p-dialog
+  header="Imagen del Evento"
+  [(visible)]="imageModalVisible"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '50vw', height: 'auto' }"
+  [resizable]="false"
+>
+  <img [src]="imageModalUrl" class="w-full h-auto rounded" alt="Imagen grande" />
+</p-dialog>
+
+
+
+<!-- FORMULARIO CREAR / EDITAR EVENTO -->
+<p-dialog
+  [header]="modo === 'create' ? 'Registrar Evento' : 'Editar Evento'"
+  [modal]="true"
+  [(visible)]="visible"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [style]="{ width: '40rem' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+
+  <!-- ========================= -->
+  <!-- SECCIÓN 1: DATOS DEL EVENTO -->
+  <!-- ========================= -->
+  <span class="text-gray-500 block mb-4">
+    Complete los datos del evento.
+  </span>
+
+  <form [formGroup]="formEvento" class="p-fluid">
+
+  
+
+    <!-- Nombre -->
+    <div class="flex flex-col mb-3">
+      <label class="font-semibold">Nombre</label>
+      <input pInputText formControlName="nombre" class="w-full" />
+       <small *ngIf="formEvento.get('nombre')?.invalid && formEvento.get('nombre')?.touched"
+         class="text-red-500">
+    El nombre es obligatorio y debe tener al menos 3 caracteres.
+  </small>
+
+    </div>
+
+    <!-- Descripción -->
+    <div class="flex flex-col mb-3">
+      <label class="font-semibold">Descripción</label>
+      <textarea
+        pInputTextarea
+        formControlName="descripcion"
+        class="w-full"
+        rows="3"
+      >
+    
+    </textarea>
+      
+    </div>
+
+    <!-- Precio base -->
+    <div class="flex flex-col mb-3">
+      <label class="font-semibold">Precio base</label>
+      <input
+        pInputText
+        type="number"
+        formControlName="precio_base"
+        class="w-full"
+        min="0"
+        step="0.01"
+      />
+      <small *ngIf="formEvento.get('precio_base')?.invalid && formEvento.get('precio_base')?.touched"
+       class="text-red-500">
+  El precio debe ser un número mayor o igual a 0.
+</small>
+    </div>
+
+      <!-- Categoría -->
+    <div class="flex flex-col mb-3">
+      <label class="font-semibold">Categoría</label>
+     <p-select
+  [options]="categorias()"
+  optionLabel="nombre"
+  optionValue="id_categoria"
+  formControlName="id_categoria"
+  placeholder="Seleccione una categoría"
+  class="w-full"
+></p-select>
+<small *ngIf="formEvento.get('id_categoria')?.invalid && formEvento.get('id_categoria')?.touched"
+       class="text-red-500">
+  Seleccione una categoría.
+</small>
+    </div>
+
+    <!-- BOTONES DE GUARDADO DEL EVENTO -->
+    <div class="flex justify-end gap-2 mt-4" *ngIf="modo === 'create' || modo === 'edit'">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        (click)="closeDialog()"
+      ></p-button>
+
+      <p-button
+  [label]="modo === 'create' ? 'Guardar evento' : 'Guardar cambios'"
+  [disabled]="formEvento.invalid"
+  (click)="guardarPaso1()"
+></p-button>
+    </div>
+
+  </form>
+
+</p-dialog>
+
+
+<!-- MODAL SOLO PARA MEDIA -->
+<p-dialog
+  header="Media del Evento"
+  [(visible)]="mediaVisible"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [style]="{ width: '50rem' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <h3 class="text-xl font-semibold mb-3">Agregar imágenes o videos</h3>
+
+  <!-- SUBIR ARCHIVOS -->
+  <p-fileUpload
+    name="media"
+    accept="image/*,video/*"
+    multiple="true"
+    chooseLabel="Seleccionar archivos"
+    uploadLabel="Subir"
+    cancelLabel="Cancelar"
+    [auto]="true"
+    (onSelect)="onMediaUpload($event)"
+  ></p-fileUpload>
+
+  <!-- TABLA DE MEDIA -->
+  <div class="mt-5">
+    <p-table [value]="media()">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Tipo</th>
+          <th>Vista previa</th>
+          <th>Orden</th>
+          <th>Visible</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-m>
+        <tr>
+          <td>{{ m.tipo }}</td>
+
+          <td>
+            <img *ngIf="m.tipo === 'imagen'" [src]="fixUrl(m.url)" class="w-24 rounded" />
+            <video *ngIf="m.tipo === 'video'" [src]="fixUrl(m.url)" class="w-32" controls></video>
+          </td>
+
+          <td>{{ m.orden || '-' }}</td>
+
+          <td>
+            <p-tag
+              [value]="m.visibilidad_publica ? 'Visible' : 'Oculto'"
+              [severity]="m.visibilidad_publica ? 'success' : 'danger'"
+            ></p-tag>
+          </td>
+
+
+          <td class="flex gap-2">
+            <p-button
+              icon="pi pi-eye-slash"
+              *ngIf="m.visibilidad_publica"
+              severity="danger"
+              (click)="toggleVisibilidad(m)"
+            ></p-button>
+
+            
+
+            <p-button
+              icon="pi pi-eye"
+              *ngIf="!m.visibilidad_publica"
+              severity="success"
+              (click)="toggleVisibilidad(m)"
+            ></p-button>
+
+
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              (click)="eliminar(m)"
+            ></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+
+
+ <p-button 
+  label="Guardar cambios" 
+  severity="success" 
+  (click)="guardarMedia()"
+></p-button>
+</p-dialog>
+
+
+<div id="swal-root"></div>
+
+
+<!-- ========================= -->
+<!-- LISTA DE EVENTOS -->
+<!-- ========================= -->
+<div class="card">
+
+  <!-- Título + Acciones -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+    <h1 class="text-3xl md:text-4xl font-bold">Eventos</h1>
+
+    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2">
+
+      <!-- Buscador -->
+      <p-iconfield iconPosition="left" class="w-full md:w-auto">
+        <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+        <input
+          pInputText
+          type="text"
+          placeholder="Buscar evento..."
+          class="border rounded px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
+          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+        />
+      </p-iconfield>
+
+      <!-- Botón Nuevo Evento -->
+      <p-button
+        label="Nuevo Evento"
+        icon="pi pi-plus"
+        (click)="openCreate()"
+      ></p-button>
+
+    </div>
+  </div>
+
+  <!-- TABLA DE EVENTOS -->
+  <div class="overflow-x-auto w-full">
+    <p-table
+      [value]="eventos()"
+      #dt
+      [paginator]="true"
+      [rows]="rows"
+      [first]="first"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [globalFilterFields]="['nombre','descripcion','estado','categoria.nombre']"
+      [paginatorDropdownAppendTo]="'body'"
+      [customSort]="true"
+      (sortFunction)="customSort($event)"
+      [tableStyle]="{ 'min-width': '60rem' }"
+    >
+
+      <!-- ENCABEZADO -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+
+          <th pSortableColumn="nombre">
+            <div class="flex items-center gap-2">
+              Nombre
+              <p-sortIcon field="nombre"></p-sortIcon>
+            </div>
+          </th>
+
+          <th pSortableColumn="categoria.nombre">
+            <div class="flex items-center gap-2">
+              Categoría
+              <p-sortIcon field="categoria.nombre"></p-sortIcon>
+            </div>
+          </th>
+
+          <th>Descripción</th>
+
+          <th pSortableColumn="precio_base">
+            <div class="flex items-center gap-2">
+              Precio base
+              <p-sortIcon field="precio_base"></p-sortIcon>
+            </div>
+          </th>
+
+          <th>Imagen</th>
+
+          <th pSortableColumn="estado">
+            <div class="flex items-center gap-2">
+              Estado
+              <p-sortIcon field="estado"></p-sortIcon>
+            </div>
+          </th>
+
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+
+      <!-- CUERPO -->
+      <ng-template pTemplate="body" let-i="rowIndex" let-ev>
+        <tr>
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ ev.nombre }}</td>
+
+          <td>{{ ev.categoria?.nombre || "-" }}</td>
+
+          <td>{{ ev.descripcion || "-" }}</td>
+
+
+          <td>{{ ev.precio_base != null ? (ev.precio_base | number: "1.2-2") : '-' }}</td>
+  
+        <td>
+  <img
+    *ngIf="ev.media?.length"
+    [src]="getFirstImage(ev)"
+    class="w-12 h-12 rounded object-cover cursor-pointer"
+    alt="Imagen principal"
+    (click)="openImage(getFirstImage(ev))"
+  />
+</td>
+
+          <td>
+            <p-tag
+              [value]="ev.estado"
+              [severity]="getSeverity(ev.estado)"
+            ></p-tag>
+          </td>
+
+          <td class="flex gap-2 flex-wrap">
+
+            <p-button
+  *ngIf="ev.estado !== 'inactivo'"
+  icon="pi pi-images"
+  severity="info"
+  (click)="openMediaModal(ev)"
+></p-button>
+
+  <p-button
+  *ngIf="ev.estado !== 'inactivo'"
+  icon="pi pi-pencil"
+  class="mr-2"
+  (click)="openEdit(ev)"
+></p-button>
+
+  <p-button
+    *ngIf="ev.estado !== 'inactivo'; else reactivar"
+    icon="pi pi-ban"
+    severity="danger"
+    (click)="changeEstado(ev, 'inactivo')"
+  ></p-button>
+
+  <ng-template #reactivar>
+    <p-button
+      label="Reactivar"
+      icon="pi pi-check"
+      severity="success"
+      (click)="changeEstado(ev, 'activo')"
+    ></p-button>
+  </ng-template>
+
+
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+
+</div>

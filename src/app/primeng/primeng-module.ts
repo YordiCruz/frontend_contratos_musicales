@@ -22,6 +22,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import {ButtonGroup} from 'primeng/buttongroup';
 import {Divider} from 'primeng/divider';
 import {Chip} from 'primeng/chip'
+import {TabsModule} from 'primeng/tabs';
 
 
 
@@ -50,6 +51,7 @@ const modulos = [
     ButtonGroup,
     Divider,
     Chip,
+    TabsModule,
 ]
 
 @NgModule({

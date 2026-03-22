@@ -22,9 +22,9 @@
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-cat>
+        <ng-template pTemplate="body" let-cat let-i="rowIndex">
           <tr>
-            <td>{{ cat.id_categoria }}</td>
+            <td>{{ i + 1 }}</td>
             <td>{{ cat.nombre }}</td>
             <td>{{ cat.descripcion }}</td>
           </tr>

@@ -5,7 +5,7 @@ import { Especialidads } from './especialidad/especialidads';
 
 @Component({
   selector: 'app-especialidades',
-  imports: [PrimengModule, Categoria, Especialidads],
+  imports: [ Categoria, Especialidads, PrimengModule],
   templateUrl: './especialidades.html',
   styleUrl: './especialidades.scss',
 })

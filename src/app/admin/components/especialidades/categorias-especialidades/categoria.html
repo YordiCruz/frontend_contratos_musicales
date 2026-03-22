@@ -2,9 +2,7 @@
 
   <h1 class="text-3xl font-bold mb-4">Lista de Categorías</h1>
 
-  <p-button label="Crear Nueva Categoría" icon="pi pi-plus" (click)="openCreate()"></p-button>
-
-  <div *ngIf="!loading() && categorias().length > 0; else cargando" class="mt-4">
+  <div *ngIf="categorias().length > 0; else cargando" class="mt-4">
 
     <div class="overflow-x-auto">
       <p-table
@@ -21,7 +19,6 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Acciones</th>
           </tr>
         </ng-template>
 
@@ -30,16 +27,12 @@
             <td>{{ cat.id_categoria }}</td>
             <td>{{ cat.nombre }}</td>
             <td>{{ cat.descripcion }}</td>
-            <td class="flex gap-2">
-              <p-button icon="pi pi-pencil" (click)="openEdit(cat)"></p-button>
-              <p-button icon="pi pi-trash" severity="danger" (click)="deleteCategoria(cat.id_categoria)"></p-button>
-            </td>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="4">No se encontraron categorías.</td>
+            <td colspan="3">No se encontraron categorías.</td>
           </tr>
         </ng-template>
       </p-table>
@@ -52,35 +45,3 @@
   </ng-template>
 
 </div>
-
-
-<!-- MODAL UNIFICADO -->
-<p-dialog
-  header="{{ isEdit ? 'Editar Categoría' : 'Nueva Categoría' }}"
-  [(visible)]="visible"
-  [modal]="true"
-  [style]="{ width: '25rem' }"
->
-  <form [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()">
-
-    <div class="p-fluid">
-
-      <div class="flex items-center gap-4 mb-3">
-        <label class="font-semibold w-28">Nombre</label>
-        <input pInputText class="flex-auto" formControlName="nombre" />
-      </div>
-
-      <div class="flex items-center gap-4 mb-3">
-        <label class="font-semibold w-28">Descripción</label>
-        <input pInputText class="flex-auto" formControlName="descripcion" />
-      </div>
-
-    </div>
-
-    <div class="flex justify-end gap-2 mt-4">
-      <p-button label="Cancelar" severity="secondary" (click)="closeDialog()"></p-button>
-      <p-button label="Guardar" type="submit" [disabled]="categoriaForm.invalid"></p-button>
-    </div>
-
-  </form>
-</p-dialog>

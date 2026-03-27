@@ -1,0 +1,370 @@
+<p-dialog 
+  header="Nueva Ubicación" 
+  [(visible)]="displayUbicacionDialog" 
+  [modal]="true"
+  [style]="{ width: '60vw' }"
+  [breakpoints]="{ '1400px': '70vw', '1200px': '80vw', '960px': '95vw', '640px': '100vw' }"
+  [contentStyle]="{ 'padding': '1rem' }"
+>
+
+  <!-- Contenedor del mapa con botón flotante -->
+ <div class="relative w-full mb-4">
+  <!-- Mapa -->
+  <google-map
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    [options]="mapOptions"
+    (mapClick)="onMapClick($event)"
+    class="rounded-lg overflow-hidden shadow-sm"
+  >
+    <map-marker *ngIf="markerPosition" [position]="markerPosition"></map-marker>
+  </google-map>
+
+  <!-- Botón flotante estilo Google Maps -->
+  <button #ubicacionBtn class="ubicacion-btn" (click)="usarMiUbicacion(); ubicacionBtn.blur()">
+
+  <i class="pi pi-map-marker text-red-400 !text-[1.7rem]"></i>
+</button>
+
+</div>
+
+  <!-- Datos de la ubicación -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="flex flex-col gap-1 min-w-0">
+      <label class="font-semibold text-sm">Nombre del lugar</label>
+      <input pInputText [value]="ubicacion.nombre" readonly class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1 min-w-0">
+      <label class="font-semibold text-sm">Dirección</label>
+      <input pInputText [value]="ubicacion.direccion" readonly class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1 min-w-0">
+      <label class="font-semibold text-sm">Latitud</label>
+      <input pInputText [value]="ubicacion.latitud" readonly class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1 min-w-0">
+      <label class="font-semibold text-sm">Longitud</label>
+      <input pInputText [value]="ubicacion.longitud" readonly class="w-full" />
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 mt-5">
+    <p-button 
+      label="Cancelar" 
+      icon="pi pi-times"
+      severity="secondary"
+      class="w-full sm:w-auto"
+      (click)="displayUbicacionDialog = false">
+    </p-button>
+
+    <p-button 
+      label="Usar ubicación" 
+      icon="pi pi-check"
+      class="w-full sm:w-auto"
+      (click)="seleccionarUbicacion()">
+    </p-button>
+  </div>
+
+</p-dialog>
+
+<p-dialog
+  header="Nuevo Contrato"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{ width: '60vw' }"
+  [closable]="true"
+  [resizable]="true"
+  [breakpoints]="{ '960px': '90vw', '640px': '100vw' }"
+>
+  <form
+    [formGroup]="contratoForm"
+    (ngSubmit)="crearContrato()"
+    class="p-4 md:p-6 lg:p-8 space-y-6 w-full"
+  >
+  <!-- Cliente, Evento y Ubicación -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <!-- Cliente -->
+    <div class="flex flex-col gap-2 w-full">
+      <label class="font-semibold">Cliente</label>
+<p-autoComplete
+  formControlName="cliente_obj"
+  [suggestions]="filteredClientes"
+  (completeMethod)="buscarCliente($event)"
+  (onSelect)="onClienteSelect($event)"
+  optionLabel="displayLabel"
+  [forceSelection]="true"
+  placeholder="Ingrese el documento del cliente"
+  class="w-full"
+>
+  <!-- Lista de sugerencias -->
+  <ng-template let-cliente pTemplate="item">
+    {{ cliente.persona.documento_identidad }} - {{ cliente.persona.nombre }} {{ cliente.persona.apellido }}
+  </ng-template>
+
+  <!-- Valor seleccionado en el input -->
+  <ng-template let-cliente pTemplate="selectedItem">
+    {{ cliente.persona.documento_identidad }} - {{ cliente.persona.nombre }} {{ cliente.persona.apellido }}
+  </ng-template>
+</p-autoComplete>
+
+<p-dialog
+  header="Registrar Cliente"
+  [(visible)]="displayClienteDialog"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+>
+  <app-clientes
+    [visible]="true"
+    [modo]="'create'"
+    (clienteRegistrado)="onClienteRegistrado($event)">
+  </app-clientes>
+</p-dialog>
+
+
+
+
+
+
+
+      <p-button
+        label="Crear Cliente"
+        icon="pi pi-user-plus"
+        class="p-button-sm w-full sm:max-w-xs"
+        (click)="openClienteDialog()"
+      ></p-button>
+    </div>
+
+    <!-- Evento -->
+    <div class="flex flex-col gap-2 w-full">
+      <label class="font-semibold">Evento</label>
+     <p-autoComplete
+  formControlName="evento_obj"
+  [suggestions]="filteredEventos"
+  (completeMethod)="buscarEvento($event)"
+  (onSelect)="onEventoSelect($event)"
+  optionLabel="displayLabel"
+  [forceSelection]="true"
+  placeholder="Ingrese el nombre del evento"
+  class="w-full"
+>
+  <!-- Lista de sugerencias -->
+  <ng-template let-evento pTemplate="item">
+    {{ evento.nombre }}
+  </ng-template>
+
+  <!-- Valor seleccionado en el input -->
+  <ng-template let-evento pTemplate="selectedItem">
+    {{ evento.nombre}}
+  </ng-template>
+</p-autoComplete>
+      <p-button
+        label="Crear Evento"
+        icon="pi pi-calendar-plus"
+        class="p-button-sm w-full sm:max-w-xs"
+        (click)="openEventoDialog()"
+      ></p-button>
+    </div>
+
+    <!-- Ubicación -->
+
+    <div class="flex flex-col gap-2 w-full">
+
+<div class="flex flex-col gap-2 w-full">
+  <label class="font-semibold">Ubicación seleccionada</label>
+  <input pInputText formControlName="ubicacion_nombre" readonly class="w-full" />
+</div>
+
+
+ <p-button 
+  *ngIf="!tieneUbicacion"
+  label="Seleccionar ubicación"
+  icon="pi pi-map-marker"
+  class="w-full sm:w-auto"
+  (click)="openUbicacionDialog()">
+</p-button>
+
+<p-button 
+  *ngIf="tieneUbicacion"
+  label="Cambiar ubicación"
+  icon="pi pi-refresh"
+  class="w-full sm:w-auto"
+  (click)="openUbicacionDialog()">
+</p-button>
+
+
+
+</div>
+
+  </div>
+
+  <!-- Fecha, Hora inicio y Horas contratadas -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+  <!-- Fecha -->
+  <div class="flex flex-col gap-2 w-full">
+    <label class="font-semibold">Fecha del Evento</label>
+    <p-datepicker
+      formControlName="fecha_evento"
+      [showIcon]="true"
+      iconDisplay="input"
+      inputId="fechaEvento"
+      class="w-full"
+    ></p-datepicker>
+  </div>
+
+  <!-- Hora inicio -->
+  <div class="flex flex-col gap-2 w-full">
+    <label class="font-semibold">Hora inicio</label>
+    <p-datepicker
+      formControlName="hora_inicio"
+      [showIcon]="true"
+      iconDisplay="input"
+      mode="time"
+      hourFormat="24"
+      inputId="horaInicio"
+      class="w-full"
+      (onSelect)="calcularHoraFin()"
+    ></p-datepicker>
+  </div>
+
+  <!-- Horas -->
+  <div class="flex flex-col gap-2 w-full">
+    <label class="font-semibold">Horas contratadas</label>
+    <input
+      pInputText
+      type="number"
+      formControlName="horas_contratadas"
+      (input)="calcularHoraFin()"
+      class="w-full"
+    />
+  </div>
+
+</div>
+
+
+
+  <!-- Hora fin -->
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div class="flex flex-col gap-2 w-full">
+      <label class="font-semibold">Hora fin</label>
+      <input pInputText formControlName="hora_fin" readonly class="w-full" />
+    </div>
+
+
+     <div class="flex flex-col gap-2 w-full">
+      <label class="font-semibold">Bloque</label>
+      <p-select
+        [options]="bloques"
+        formControlName="bloque"
+        placeholder="Selecciona bloque"
+        class="w-full"
+      ></p-select>
+    </div>
+    <div class="flex flex-col gap-2 w-full">
+      <label class="font-semibold">Tipo de servicio</label>
+      <p-select
+        [options]="tiposServicio"
+        formControlName="tipo_servicio"
+        placeholder="Selecciona servicio"
+        class="w-full"
+      ></p-select>
+    </div>
+
+
+
+  </div>
+
+ <!-- Botones -->
+    <div class="flex flex-col sm:flex-row justify-end gap-3 mt-6 w-full"> <!-- w-full agregado -->
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        severity="secondary"
+        class="w-full sm:w-auto"
+        (click)="displayDialog = false"
+      ></p-button>
+      <p-button
+        label="Crear Contrato"
+        icon="pi pi-check"
+        type="submit"
+        class="w-full sm:w-auto"
+      ></p-button>
+    </div>
+  </form>
+
+
+</p-dialog>
+
+<!-- Tabla -->
+<div class="card">
+  <div class="flex justify-between mb-4">
+    <h1 class="text-3xl font-bold">Contratos</h1>
+    <p-button
+      label="Nuevo Contrato"
+      icon="pi pi-plus"
+      (click)="openCreate()"
+    ></p-button>
+  </div>
+
+  <p-table [value]="contratos" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>#</th>
+        <th>Cliente</th>
+        <th>Evento</th>
+        <th>Fecha</th>
+        <th>Bloque</th>
+        <th>Servicio</th>
+        <th>Horas</th>
+        <th>Ubicación</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-contrato let-i="rowIndex">
+      <tr>
+        <td>{{ i + 1 }}</td>
+        <td>
+          {{ contrato.cliente?.persona?.nombre }}
+          {{ contrato.cliente?.persona?.apellido }}
+        </td>
+        <td>{{ contrato.evento?.nombre }}</td>
+        <td>{{ contrato.fecha_evento | date: "dd/MM/yyyy" }}</td>
+        <td>{{ contrato.bloque }}</td>
+        <td>{{ contrato.tipo_servicio }}</td>
+        <td>{{ contrato.horas_contratadas }}</td>
+        <td>{{ contrato.ubicacion?.nombre }}</td>
+        <td>
+          <p-tag
+            [value]="contrato.estado"
+            [severity]="getSeverity(contrato.estado)"
+          ></p-tag>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-eye"
+            severity="info"
+            (click)="openDetail(contrato)"
+          ></p-button>
+          <p-button
+            icon="pi pi-check"
+            severity="success"
+            (click)="confirmarContrato(contrato)"
+            *ngIf="contrato.estado === 'pendiente'"
+          ></p-button>
+          <p-button
+            icon="pi pi-ban"
+            severity="danger"
+            (click)="cancelarContrato(contrato)"
+            *ngIf="contrato.estado !== 'cancelado'"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

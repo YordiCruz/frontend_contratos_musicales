@@ -1,0 +1,186 @@
+/* ===== CONTENEDOR GENERAL ===== */
+:host {
+  display: block;
+}
+
+/* ===== FORMULARIO ===== */
+:host ::ng-deep form {
+  width: 100%;
+}
+
+/* ===== GRID RESPONSIVO (refuerzo por si Tailwind falla) ===== */
+:host ::ng-deep .grid {
+  width: 100%;
+}
+
+/* ===== CAMPOS ===== */
+:host ::ng-deep .field,
+:host ::ng-deep .flex.flex-col {
+  width: 100%;
+}
+
+/* ===== LABELS ===== */
+:host ::ng-deep label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* ===== INPUTS BASE ===== */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-inputnumber,
+:host ::ng-deep .p-autocomplete,
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-select {
+  width: 100% !important;
+}
+
+/* ===== AUTOCOMPLETE INPUT ===== */
+:host ::ng-deep .p-autocomplete input {
+  width: 100% !important;
+}
+
+/* ===== DATEPICKER (FIX CLAVE 🔥) ===== */
+:host ::ng-deep .p-datepicker {
+  width: 100%;
+  position: relative;
+}
+
+/* INPUT DEL DATEPICKER */
+:host ::ng-deep .p-datepicker .p-inputtext {
+  width: 100%;
+  padding-right: 2.5rem !important; /* espacio para icono */
+}
+
+/* ICONO DEL DATEPICKER */
+:host ::ng-deep .p-datepicker .p-datepicker-trigger {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== SELECT (p-select) ===== */
+:host ::ng-deep .p-select {
+  width: 100%;
+}
+
+:host ::ng-deep .p-select-label {
+  width: 100%;
+}
+
+/* ===== BOTONES ===== */
+:host ::ng-deep .p-button {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  :host ::ng-deep .p-button.w-auto {
+    width: auto;
+  }
+}
+
+/* ===== DIALOG ===== */
+:host ::ng-deep .p-dialog {
+  width: 60vw;
+  max-width: 1200px;
+}
+
+@media (max-width: 960px) {
+  :host ::ng-deep .p-dialog {
+    width: 90vw !important;
+  }
+}
+
+@media (max-width: 640px) {
+  :host ::ng-deep .p-dialog {
+    width: 100vw !important;
+    margin: 0;
+  }
+}
+
+/* ===== TABLA ===== */
+:host ::ng-deep .p-table {
+  width: 100%;
+}
+
+:host ::ng-deep .p-table th,
+:host ::ng-deep .p-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+//mapa
+#map {
+  width: 100%;
+  height: 50vh; /* más usable */
+  min-height: 300px;
+  border-radius: 8px;
+}
+
+
+/* Botón flotante tipo Google Maps */
+.ubicacion-btn {
+  position: absolute;
+  top: 27rem;
+  right: 0.7em;
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 41px;
+  height: 41px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+  z-index: 50;
+}
+
+.ubicacion-btn:focus:hover {
+  background-color: #f3f4f6; /* vuelve al color base */
+  transform: none;
+}
+
+
+
+.ubicacion-btn:hover {
+  background-color: #23e7fd;
+  transform: scale(1.05);
+}
+
+.ubicacion-btn:active {
+  transform: scale(0.95);
+}
+
+
+
+
+
+
+/* 🔥 CRÍTICO */
+:host ::ng-deep .p-dialog-content {
+  overflow: auto !important;
+}
+
+
+/* ===== TAG ===== */
+:host ::ng-deep .p-tag {
+  justify-content: center;
+}
+
+/* ===== ESPACIADO CONSISTENTE ===== */
+:host ::ng-deep .gap-2 > * {
+  margin: 0;
+}
+
+/* ===== INPUT READONLY ===== */
+:host ::ng-deep input[readonly] {
+  background-color: #f3f4f6; /* gris suave */
+  cursor: not-allowed;
+}

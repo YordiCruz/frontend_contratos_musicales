@@ -77,7 +77,6 @@ export class Clientes {
   onClienteGuardado(cliente: ClientInterface) {
     this.visibleForm = false;
     this.loadClientes(); // recarga la tabla
-    Swal.fire('Actualizado', 'Cliente guardado correctamente', 'success');
   }
 
   // -----------------------------

@@ -12,13 +12,16 @@ import { MediaEventosInterface } from '../../../interfaces/media-eventos-interfa
 import { EventosService } from '../../../services/eventos-service';
 import { CategoriaEventosService } from '../../../services/categoria-eventos-service';
 import { MediaEventosService } from '../../../services/media-eventos-service';
+import { EventosForm } from './form/eventos-form';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
   selector: 'app-events',
   standalone: true,
   templateUrl: './events.html',
-  imports: [CommonModule, PrimengModule, ReactiveFormsModule]
+  imports: [CommonModule, PrimengModule, ReactiveFormsModule, EventosForm],
+  providers: [MessageService]
 })
 export class Events {
 
@@ -53,7 +56,8 @@ export class Events {
   constructor(
     private eventosService: EventosService,
     private categoriaService: CategoriaEventosService,
-    private mediaService: MediaEventosService
+    private mediaService: MediaEventosService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -125,22 +129,11 @@ loadCategorias() {
   // ============================
   // CREAR EVENTO
   // ============================
-  openCreate() {
+ openCreate() {
     this.modo = 'create';
     this.eventoSeleccionado = null;
-
-    this.formEvento.reset({
-      id_categoria: null,
-      nombre: '',
-      descripcion: null,
-      precio_base: null,
-    });
-
-    this.step = 1;
-    this.id_evento_creado = null;
-    this.media.set([]);
-
     this.visible = true;
+    this.id_evento_creado = null;
   }
 
   // ============================
@@ -148,24 +141,11 @@ loadCategorias() {
   // ============================
   
 // Al abrir modal de edición o creación de evento
-openEdit(e: EventosInterface) {
-  this.modo = 'edit';
-  this.eventoSeleccionado = e;
-
-  if (this.categorias().length === 0) this.loadCategorias();
-
-  this.formEvento.patchValue({
-    id_categoria: String(e.id_categoria),
-    nombre: e.nombre,
-    descripcion: e.descripcion ?? null,
-    precio_base: e.precio_base ?? null
-  });
-
-  this.id_evento_creado = e.id_evento;
-
-  this.visible = true; // solo modal de datos
-}
-
+  openEdit(e: EventosInterface) {
+    this.modo = 'edit';
+    this.eventoSeleccionado = e;
+    this.visible = true;
+  }
 
 
 /// media 
@@ -208,57 +188,120 @@ getUrl(media: MediaEventosInterface) {
   // PASO 1: GUARDAR EVENTO
   // ============================
 
-  
-  guardarPaso1() {
-    if (this.formEvento.invalid) return;
+onGuardarEvento(payload: any) {
+  if (this.modo === 'create') {
+    this.eventosService.crear(payload).subscribe({
+      next: ev => {
+        this.id_evento_creado = ev.id_evento;
+        this.loadEventos();
+        this.visible = false;
 
-    const f = this.formEvento.value;
-
-    const payload = {
-      id_categoria: f.id_categoria!,
-      nombre: f.nombre!,
-      descripcion: f.descripcion ?? null,
-      precio_base: f.precio_base != null ? Number(f.precio_base) : 0
-    };
-
-    if (this.modo === 'create') {
-  this.eventosService.crear(payload).subscribe(ev => {
-    this.id_evento_creado = ev.id_evento;
-    this.loadEventos();
-
-    this.visible = false; // cerrar modal de datos
-
-    Swal.fire({
-      title: 'Evento creado',
-      text: '¿Desea agregar imágenes o videos al evento?',
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, agregar media',
-      cancelButtonText: 'No, gracias'
-    }).then(res => {
-      if (res.isConfirmed) {
-        this.mediaVisible = true; // abrir modal de media
-        this.loadMedia();
+        // ✅ Swal para éxito + pregunta de media
+        Swal.fire({
+          title: 'Evento creado',
+          text: '¿Desea agregar imágenes o videos al evento?',
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, agregar media',
+          cancelButtonText: 'No, gracias'
+        }).then(res => {
+          if (res.isConfirmed) {
+            this.mediaVisible = true;
+            this.loadMedia();
+          }
+        });
+      },
+      error: err => {
+        // ❌ MessageService para error
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al crear',
+          detail: err?.error?.message || 'Error desconocido'
+        });
       }
     });
-  });
-} else if (this.modo === 'edit' && this.eventoSeleccionado) {
-  this.eventosService.editar(this.eventoSeleccionado.id_evento, payload).subscribe(() => {
-    Swal.fire('Actualizado', 'Datos del evento actualizados', 'success');
+  } else if (this.modo === 'edit' && this.eventoSeleccionado) {
+    this.eventosService.editar(this.eventoSeleccionado.id_evento, payload).subscribe({
+      next: () => {
+        this.loadEventos();
+        this.visible = false;
 
-    this.visible = false;
-
-    this.loadMedia();
-    this.loadEventos();
-  });
-
-    }
+        // ✅ Swal para éxito
+        Swal.fire('Evento actualizado', 'Los cambios fueron guardados correctamente', 'success');
+      },
+      error: err => {
+        // ❌ MessageService para error
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al actualizar',
+          detail: err?.error?.message || 'Error desconocido'
+        });
+      }
+    });
   }
+}
+
+
+
+  onCerrarEvento() {
+    this.visible = false;
+    this.eventoSeleccionado = null;
+    this.id_evento_creado = null;
+  }
+
+
+//   guardarPaso1() {
+//     if (this.formEvento.invalid) return;
+
+//     const f = this.formEvento.value;
+
+//     const payload = {
+//       id_categoria: f.id_categoria!,
+//       nombre: f.nombre!,
+//       descripcion: f.descripcion ?? null,
+//       precio_base: f.precio_base != null ? Number(f.precio_base) : 0
+//     };
+
+//     if (this.modo === 'create') {
+//   this.eventosService.crear(payload).subscribe(ev => {
+//     this.id_evento_creado = ev.id_evento;
+//     this.loadEventos();
+
+//     this.visible = false; // cerrar modal de datos
+
+//     Swal.fire({
+//       title: 'Evento creado',
+//       text: '¿Desea agregar imágenes o videos al evento?',
+//       icon: 'success',
+//       showCancelButton: true,
+//       confirmButtonText: 'Sí, agregar media',
+//       cancelButtonText: 'No, gracias'
+//     }).then(res => {
+//       if (res.isConfirmed) {
+//         this.mediaVisible = true; // abrir modal de media
+//         this.loadMedia();
+//       }
+//     });
+//   });
+// } else if (this.modo === 'edit' && this.eventoSeleccionado) {
+//   this.eventosService.editar(this.eventoSeleccionado.id_evento, payload).subscribe(() => {
+//     Swal.fire('Actualizado', 'Datos del evento actualizados', 'success');
+
+//     this.visible = false;
+
+//     this.loadMedia();
+//     this.loadEventos();
+//   });
+
+//     }
+//   }
 
   // ============================
   // MEDIA
   // ============================
-loadMedia() {
+
+
+  loadMedia() {
   if (!this.id_evento_creado) return;
 
   this.mediaService.listar(this.id_evento_creado).subscribe(res => {
@@ -299,13 +342,28 @@ toggleVisibilidad(m: MediaEventosInterface) {
 }
 
 
- eliminar(m: MediaEventosInterface) {
-  this.mediaService.eliminar(m.id_media)
-    .subscribe(() => {
+eliminar(m: MediaEventosInterface) {
+  this.mediaService.eliminar(m.id_media).subscribe({
+    next: () => {
       this.loadMedia();
       this.loadEventos();
 
-    });
+      // ✅ Toast de confirmación
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Imagen eliminada',
+        detail: 'La imagen fue eliminada correctamente'
+      });
+    },
+    error: err => {
+      // ❌ Toast de error
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error al eliminar',
+        detail: err?.error?.message || 'No se pudo eliminar la imagen'
+      });
+    }
+  });
 }
 
   // ============================

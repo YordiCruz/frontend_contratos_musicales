@@ -1,6 +1,10 @@
 
+
+
+
 <!-- DIALOG PARA MOSTRAR IMAGEN -->
 <p-dialog
+
   header="Imagen del Evento"
   [(visible)]="imageModalVisible"
   [modal]="true"
@@ -16,102 +20,24 @@
 <!-- FORMULARIO CREAR / EDITAR EVENTO -->
 <p-dialog
   [header]="modo === 'create' ? 'Registrar Evento' : 'Editar Evento'"
-  [modal]="true"
   [(visible)]="visible"
-  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [modal]="true"
   [style]="{ width: '40rem' }"
-  [draggable]="false"
-  [resizable]="false"
+  [closable]="true"
 >
+<p-toast position="top-right"></p-toast>
 
-  <!-- ========================= -->
-  <!-- SECCIÓN 1: DATOS DEL EVENTO -->
-  <!-- ========================= -->
-  <span class="text-gray-500 block mb-4">
-    Complete los datos del evento.
-  </span>
+  <app-eventos-form
+    [categorias]="categorias()"
+    [evento]="eventoSeleccionado"
+    [modo]="modo"
+    (guardar)="onGuardarEvento($event)"
+    (cerrar)="onCerrarEvento()"
+  >
 
-  <form [formGroup]="formEvento" class="p-fluid">
-
-  
-
-    <!-- Nombre -->
-    <div class="flex flex-col mb-3">
-      <label class="font-semibold">Nombre</label>
-      <input pInputText formControlName="nombre" class="w-full" />
-       <small *ngIf="formEvento.get('nombre')?.invalid && formEvento.get('nombre')?.touched"
-         class="text-red-500">
-    El nombre es obligatorio y debe tener al menos 3 caracteres.
-  </small>
-
-    </div>
-
-    <!-- Descripción -->
-    <div class="flex flex-col mb-3">
-      <label class="font-semibold">Descripción</label>
-      <textarea
-        pInputTextarea
-        formControlName="descripcion"
-        class="w-full"
-        rows="3"
-      >
-    
-    </textarea>
-      
-    </div>
-
-    <!-- Precio base -->
-    <div class="flex flex-col mb-3">
-      <label class="font-semibold">Precio base</label>
-      <input
-        pInputText
-        type="number"
-        formControlName="precio_base"
-        class="w-full"
-        min="0"
-        step="0.01"
-      />
-      <small *ngIf="formEvento.get('precio_base')?.invalid && formEvento.get('precio_base')?.touched"
-       class="text-red-500">
-  El precio debe ser un número mayor o igual a 0.
-</small>
-    </div>
-
-      <!-- Categoría -->
-    <div class="flex flex-col mb-3">
-      <label class="font-semibold">Categoría</label>
-     <p-select
-  [options]="categorias()"
-  optionLabel="nombre"
-  optionValue="id_categoria"
-  formControlName="id_categoria"
-  placeholder="Seleccione una categoría"
-  class="w-full"
-></p-select>
-<small *ngIf="formEvento.get('id_categoria')?.invalid && formEvento.get('id_categoria')?.touched"
-       class="text-red-500">
-  Seleccione una categoría.
-</small>
-    </div>
-
-    <!-- BOTONES DE GUARDADO DEL EVENTO -->
-    <div class="flex justify-end gap-2 mt-4" *ngIf="modo === 'create' || modo === 'edit'">
-      <p-button
-        label="Cancelar"
-        severity="secondary"
-        (click)="closeDialog()"
-      ></p-button>
-
-      <p-button
-  [label]="modo === 'create' ? 'Guardar evento' : 'Guardar cambios'"
-  [disabled]="formEvento.invalid"
-  (click)="guardarPaso1()"
-></p-button>
-    </div>
-
-  </form>
-
+</app-eventos-form>
 </p-dialog>
+
 
 
 <!-- MODAL SOLO PARA MEDIA -->
@@ -125,7 +51,7 @@
   [resizable]="false"
 >
   <h3 class="text-xl font-semibold mb-3">Agregar imágenes o videos</h3>
-
+<p-toast position="top-right"></p-toast>
   <!-- SUBIR ARCHIVOS -->
   <p-fileUpload
     name="media"
@@ -146,12 +72,11 @@
           <th>Tipo</th>
           <th>Vista previa</th>
           <th>Orden</th>
-          <th>Visible</th>
           <th>Acciones</th>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-m>
+      <ng-template pTemplate="body" let-m let-i="rowIndex">
         <tr>
           <td>{{ m.tipo }}</td>
 
@@ -160,32 +85,12 @@
             <video *ngIf="m.tipo === 'video'" [src]="fixUrl(m.url)" class="w-32" controls></video>
           </td>
 
-          <td>{{ m.orden || '-' }}</td>
+          <td>{{ i + 1 }}</td>
 
-          <td>
-            <p-tag
-              [value]="m.visibilidad_publica ? 'Visible' : 'Oculto'"
-              [severity]="m.visibilidad_publica ? 'success' : 'danger'"
-            ></p-tag>
-          </td>
-
+       
 
           <td class="flex gap-2">
-            <p-button
-              icon="pi pi-eye-slash"
-              *ngIf="m.visibilidad_publica"
-              severity="danger"
-              (click)="toggleVisibilidad(m)"
-            ></p-button>
-
             
-
-            <p-button
-              icon="pi pi-eye"
-              *ngIf="!m.visibilidad_publica"
-              severity="success"
-              (click)="toggleVisibilidad(m)"
-            ></p-button>
 
 
             <p-button

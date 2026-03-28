@@ -23,6 +23,8 @@ import {ButtonGroup} from 'primeng/buttongroup';
 import {Divider} from 'primeng/divider';
 import {Chip} from 'primeng/chip'
 import {TabsModule} from 'primeng/tabs';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import {ToastModule} from 'primeng/toast';
 
 
 
@@ -52,6 +54,8 @@ const modulos = [
     Divider,
     Chip,
     TabsModule,
+    AutoCompleteModule,
+    ToastModule
 ]
 
 @NgModule({

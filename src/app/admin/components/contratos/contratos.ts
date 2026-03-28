@@ -10,6 +10,7 @@ import { UbicacionService } from '../../services/ubicacion-service';
 import { ClientService } from '../../services/cliente-service';
 import { EventosService } from '../../services/eventos-service';
 import { Clientes } from '../clientes/clientes';
+import { ClientesForm } from '../clientes/form/clientes-form';
 
 @Component({
   selector: 'app-contratos',
@@ -21,7 +22,7 @@ import { Clientes } from '../clientes/clientes';
     PrimengModule, 
     FormsModule, 
     GoogleMapsModule,
-    Clientes
+    ClientesForm
   ],
   providers: [MessageService]
 })

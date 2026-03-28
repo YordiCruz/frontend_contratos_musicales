@@ -4,12 +4,14 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ClientInterface } from "../../../interfaces/cliente-interface";
 import { ClientService } from "../../../services/cliente-service";
 import Swal from "sweetalert2";
+import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-cliente-form',
   standalone: true,
   templateUrl: './clientes-form.html',
-  imports: [PrimengModule, ReactiveFormsModule]
+  imports: [PrimengModule, ReactiveFormsModule],
+  providers:[MessageService]
 })
 export class ClientesForm {
   @Input() cliente: ClientInterface | null = null; // para modo edición
@@ -37,61 +39,97 @@ export class ClientesForm {
     })
   });
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private messageService: MessageService) {}
 
-  ngOnChanges() {
-    // si recibimos un cliente por @Input, rellenamos el formulario (modo edición)
-    if (this.cliente) {
-      this.formCliente.patchValue({
-        persona: {
-          nombre: this.cliente.persona.nombre,
-          apellido: this.cliente.persona.apellido,
-          documento_identidad: this.cliente.persona.documento_identidad,
-          telefono: this.cliente.persona.telefono,
-          email: this.cliente.persona.email
-        },
-        cliente: {
-          preferencia_contacto: this.cliente.preferencia_contacto,
-          tipo_cliente: this.cliente.tipo_cliente
-        }
-      });
-    }
-  }
-
-  guardar() {
-    if (this.formCliente.invalid) return;
-
-    const f = this.formCliente.value;
-    const payload = {
+ngOnChanges() {
+  if (this.cliente) {
+    // modo edición
+    this.formCliente.patchValue({
       persona: {
-        nombre: f.persona?.nombre!,
-        apellido: f.persona?.apellido!,
-        documento_identidad: f.persona?.documento_identidad!,
-        telefono: f.persona?.telefono!,
-        email: f.persona?.email!
+        nombre: this.cliente.persona.nombre,
+        apellido: this.cliente.persona.apellido,
+        documento_identidad: this.cliente.persona.documento_identidad,
+        telefono: this.cliente.persona.telefono,
+        email: this.cliente.persona.email
       },
       cliente: {
-        tipo_cliente: f.cliente?.tipo_cliente || 'individual',
-        preferencia_contacto: f.cliente?.preferencia_contacto || null,
-        origen_registro: 'web'
+        preferencia_contacto: this.cliente.preferencia_contacto,
+        tipo_cliente: this.cliente.tipo_cliente
       }
-    };
+    });
+  } else {
+    // modo creación → limpiar formulario
+    this.formCliente.reset({
+      persona: {
+        nombre: '',
+        apellido: '',
+        documento_identidad: '',
+        telefono: '',
+        email: ''
+      },
+      cliente: {
+        preferencia_contacto: null,
+        tipo_cliente: 'individual'
+      }
+    });
+  }
+}
 
-    if (this.cliente) {
-      // modo edición
-      this.clientService.update(this.cliente.id, payload).subscribe(() => {
+
+guardar() {
+  if (this.formCliente.invalid) return;
+
+  const f = this.formCliente.value;
+
+  const payload = {
+    persona: {
+      nombre: f.persona?.nombre!,
+      apellido: f.persona?.apellido!,
+      documento_identidad: f.persona?.documento_identidad!,
+      telefono: f.persona?.telefono!,
+      email: f.persona?.email!
+    },
+    cliente: {
+      tipo_cliente: f.cliente?.tipo_cliente || 'individual',
+      preferencia_contacto: f.cliente?.preferencia_contacto || null
+    }
+  };
+
+  if (this.cliente) {
+    // 🔹 MODO EDICIÓN
+    this.clientService.update(this.cliente.id, payload).subscribe({
+      next: (res: ClientInterface) => {
         Swal.fire('Actualizado', 'Cliente actualizado correctamente', 'success');
-        this.clienteRegistrado.emit(this.cliente!);
-
-      });
-    } else {
-      // modo creación
-      this.clientService.create(payload).subscribe((clienteCreado) => {
+        this.clienteRegistrado.emit(res);
+        console.log("payloadfinal", payload);
+      },
+      error: (err) => {
+        console.error('Error backend:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error?.message || 'Error desconocido'
+        });
+      }
+    });
+  } else {
+    // 🔹 MODO CREACIÓN
+    this.clientService.create(payload).subscribe({
+      next: (clienteCreado: ClientInterface) => {
         Swal.fire('Creado', 'Cliente creado correctamente', 'success');
         this.clienteRegistrado.emit(clienteCreado);
-      });
-    }
+      },
+      error: (err) => {
+        console.error('Error backend:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error?.message || 'Error desconocido'
+        });
+      }
+    });
   }
+}
 
   closeDialog() {
     this.cerrar.emit(); // notifica al padre que cierre el diálogo

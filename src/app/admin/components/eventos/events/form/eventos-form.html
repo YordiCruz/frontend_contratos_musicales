@@ -1,4 +1,4 @@
-
+<p-toast position="top-right"></p-toast>
 
 
 <form [formGroup]="formEvento" class="p-fluid">
@@ -35,12 +35,12 @@
       appendTo="body"
     ></p-select>
     <small *ngIf="formEvento.get('id_categoria')?.invalid && formEvento.get('id_categoria')?.touched" class="text-red-500">
-      Seleccione una categoría.
+      Seleccione una categoría
     </small>
   </div>
 
   <div class="flex justify-end gap-2 mt-4">
     <p-button label="Cancelar" severity="secondary" (click)="onCerrar()"></p-button>
-    <p-button [label]="modo === 'create' ? 'Guardar evento' : 'Guardar cambios'" [disabled]="formEvento.invalid" (click)="onGuardar()"></p-button>
+    <p-button [label]="modo === 'create' ? 'Guardar evento' : 'Guardar cambios'" [disabled]="formEvento.invalid" (click)="guardar()"></p-button>
   </div>
 </form>

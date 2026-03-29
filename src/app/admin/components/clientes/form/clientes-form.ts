@@ -18,6 +18,9 @@ export class ClientesForm {
   @Output() clienteRegistrado = new EventEmitter<ClientInterface>();
   @Output() cerrar = new EventEmitter<void>(); // para notificar al padre que se cierre el diálogo
 
+  @Input() usarSwal = true;
+
+
   // opciones de contacto
   preferenciasContacto = [
     { label: 'WhatsApp', value: 'whatsapp' },
@@ -59,7 +62,14 @@ ngOnChanges() {
     });
   } else {
     // modo creación → limpiar formulario
-    this.formCliente.reset({
+    this.resetform();
+}
+
+
+}
+
+resetform(){
+  this.formCliente.reset({
       persona: {
         nombre: '',
         apellido: '',
@@ -73,8 +83,6 @@ ngOnChanges() {
       }
     });
   }
-}
-
 
 guardar() {
   if (this.formCliente.invalid) return;
@@ -116,7 +124,9 @@ guardar() {
     // 🔹 MODO CREACIÓN
     this.clientService.create(payload).subscribe({
       next: (clienteCreado: ClientInterface) => {
-        Swal.fire('Creado', 'Cliente creado correctamente', 'success');
+        if (this.usarSwal) {
+  Swal.fire('Creado', 'Cliente creado correctamente', 'success');
+}
         this.clienteRegistrado.emit(clienteCreado);
       },
       error: (err) => {

@@ -7,6 +7,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { AdminAuthInterceptor } from './core/interceptors/admin-auth-interceptor';
 import { ClientAuthInterceptor } from './core/interceptors/client-auth-interceptor';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([AdminAuthInterceptor, ClientAuthInterceptor] ), withFetch()),
     provideAnimationsAsync(), // Agrega esta línea
-    providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } })
+    providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
+    MessageService
     
   ]
 };

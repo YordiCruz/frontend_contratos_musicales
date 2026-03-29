@@ -1,5 +1,5 @@
 // src/app/admin/pages/eventos/eventos.ts
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -188,6 +188,8 @@ getUrl(media: MediaEventosInterface) {
   // PASO 1: GUARDAR EVENTO
   // ============================
 
+
+
 onGuardarEvento(payload: any) {
   if (this.modo === 'create') {
     this.eventosService.crear(payload).subscribe({
@@ -195,24 +197,9 @@ onGuardarEvento(payload: any) {
         this.id_evento_creado = ev.id_evento;
         this.loadEventos();
         this.visible = false;
-
-        // ✅ Swal para éxito + pregunta de media
-        Swal.fire({
-          title: 'Evento creado',
-          text: '¿Desea agregar imágenes o videos al evento?',
-          icon: 'success',
-          showCancelButton: true,
-          confirmButtonText: 'Sí, agregar media',
-          cancelButtonText: 'No, gracias'
-        }).then(res => {
-          if (res.isConfirmed) {
-            this.mediaVisible = true;
-            this.loadMedia();
-          }
-        });
+        // 👇 Swal ya lo maneja el hijo
       },
       error: err => {
-        // ❌ MessageService para error
         this.messageService.add({
           severity: 'error',
           summary: 'Error al crear',
@@ -225,12 +212,9 @@ onGuardarEvento(payload: any) {
       next: () => {
         this.loadEventos();
         this.visible = false;
-
-        // ✅ Swal para éxito
         Swal.fire('Evento actualizado', 'Los cambios fueron guardados correctamente', 'success');
       },
       error: err => {
-        // ❌ MessageService para error
         this.messageService.add({
           severity: 'error',
           summary: 'Error al actualizar',
@@ -240,6 +224,7 @@ onGuardarEvento(payload: any) {
     });
   }
 }
+
 
 
 

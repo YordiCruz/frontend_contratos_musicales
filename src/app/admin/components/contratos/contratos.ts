@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ContratosInterface } from '../../interfaces/contratos-interface';
 import { ContratosService } from '../../services/contratos-service';
@@ -11,6 +11,11 @@ import { ClientService } from '../../services/cliente-service';
 import { EventosService } from '../../services/eventos-service';
 import { Clientes } from '../clientes/clientes';
 import { ClientesForm } from '../clientes/form/clientes-form';
+import { ClientInterface } from '../../interfaces/cliente-interface';
+import { EventosInterface } from '../../interfaces/eventos-interface';
+import { EventosForm } from '../eventos/events/form/eventos-form';
+import { CategoriaEventosInterface } from '../../interfaces/categoria-eventos-interface';
+import { CategoriaEventosService } from '../../services/categoria-eventos-service';
 
 @Component({
   selector: 'app-contratos',
@@ -19,14 +24,23 @@ import { ClientesForm } from '../clientes/form/clientes-form';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    PrimengModule, 
-    FormsModule, 
+    PrimengModule,
+    FormsModule,
     GoogleMapsModule,
-    ClientesForm
+    ClientesForm,
+    EventosForm
   ],
   providers: [MessageService]
 })
 export class Contratos implements OnInit {
+
+
+
+@ViewChild(EventosForm) eventoFormComponent!: EventosForm;
+@ViewChild(ClientesForm) clienteFormComponent!: ClientesForm;
+
+
+
   contratos: ContratosInterface[] = [];
   contratoForm!: FormGroup;
 
@@ -67,7 +81,8 @@ export class Contratos implements OnInit {
     private ngZone: NgZone,
     private ubicacionService: UbicacionService,
     private clientsService: ClientService,
-    private eventosService: EventosService
+    private eventosService: EventosService,
+    private categoriasService: CategoriaEventosService
 
   ) {}
 
@@ -90,14 +105,13 @@ onMapReady(map: google.maps.Map) {
 
 
 
-
-
   ngOnInit(): void {
     this.loadContratos();
     this.initForm();
     this.initMenu();
     this.listarclientes();
     this.listareventos();
+    this.cargarCategorias();
 
 
   }
@@ -215,11 +229,29 @@ listarclientes() {
 }
 
 
-onClienteRegistrado(cliente: any) {
-  this.clientes.push(cliente);
-  this.contratoForm.patchValue({ cliente: cliente.id });
-  this.displayClienteDialog = false; // cerrar el diálogo
+onClienteRegistrado(cliente: ClientInterface) {
+  this.displayClienteDialog = false; // cerrar el diálogo de cliente
+
+  this.clienteFormComponent?.resetform();
+
+
+  // ✅ Toast de éxito
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Cliente creado',
+    detail: 'El cliente fue registrado correctamente'
+  });
+
+   const clienteConLabel = {
+    ...cliente,
+    displayLabel: `${cliente.persona.documento_identidad} - ${cliente.persona.nombre} ${cliente.persona.apellido}`
+  };
+
+
+  // aquí puedes también setear el cliente en el contrato
+  this.contratoForm.patchValue({ cliente_obj: clienteConLabel });
 }
+
 
 
 
@@ -233,7 +265,18 @@ onClienteRegistrado(cliente: any) {
   );
   }
 
+  categorias: CategoriaEventosInterface[] = [];
 
+
+
+cargarCategorias() {
+  this.categoriasService.listar().subscribe(res => {
+    this.categorias = res.map(c => ({
+      ...c,
+      id_categoria: String(c.id_categoria)
+    }));
+  });
+}
   onEventoSelect(event: any) {
   const evento = event.value;
 
@@ -253,6 +296,30 @@ onClienteRegistrado(cliente: any) {
     }
   });
 }
+
+
+onEventoRegistrado(evento: EventosInterface) {
+  this.displayEventoDialog = false; // cerrar el diálogo de cliente
+
+  this.eventoFormComponent?.resetForm();
+
+  // ✅ Toast de éxito
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Evento creado',
+    detail: 'El Evento fue registrado correctamente'
+  });
+
+   const eventoConLabel = {
+    ...evento,
+    displayLabel: `${evento.nombre}`
+  };
+
+
+  // aquí puedes también setear el cliente en el contrato
+  this.contratoForm.patchValue({ evento_obj: eventoConLabel });
+}
+
 
 
   // ---------------- Hora fin ----------------
@@ -407,7 +474,7 @@ seleccionarUbicacion() {
           this.cd.detectChanges();
         }
       });
-  } 
+  }
   // 🔥 SI NO EXISTE → CREAR
   else {
     this.ubicacionService.crearUbicacion(this.ubicacion)

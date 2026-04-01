@@ -25,6 +25,7 @@ import {Chip} from 'primeng/chip'
 import {TabsModule} from 'primeng/tabs';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ToastModule} from 'primeng/toast';
+import {CardModule} from 'primeng/card';
 
 
 
@@ -55,7 +56,8 @@ const modulos = [
     Chip,
     TabsModule,
     AutoCompleteModule,
-    ToastModule
+    ToastModule,
+    CardModule
 ]
 
 @NgModule({

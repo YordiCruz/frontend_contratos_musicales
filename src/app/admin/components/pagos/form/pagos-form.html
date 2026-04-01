@@ -1,0 +1,92 @@
+<p-dialog 
+  header="Registrar Pago" 
+  [(visible)]="displayForm" 
+  [modal]="true" 
+  [style]="{width: '32rem'}" 
+  [breakpoints]="{'960px': '75vw', '640px': '95vw'}"
+  [closable]="true">
+
+  <form [formGroup]="form" class="p-fluid">
+
+    <!-- DATOS DEL PAGO -->
+    <p-divider align="left">
+      <span class="text-sm font-semibold text-gray-600">Datos del Pago</span>
+    </p-divider>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <!-- Contrato ID -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Contrato ID</label>
+        <input pInputText formControlName="contratoId" class="w-full" [readonly]="true" />
+        <small *ngIf="form.get('contratoId')?.invalid && form.get('contratoId')?.touched" class="p-error">
+          El contrato es obligatorio
+        </small>
+      </div>
+
+      <!-- Monto -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Monto</label>
+        <p-inputNumber formControlName="monto" [min]="0" mode="currency" currency="BOB" locale="es-BO" class="w-full"></p-inputNumber>
+        <small *ngIf="form.get('monto')?.invalid && form.get('monto')?.touched" class="p-error">
+          El monto debe ser mayor o igual a 0
+        </small>
+      </div>
+
+      <!-- Método -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Método</label>
+        <p-select [options]="metodos" formControlName="metodo" placeholder="Seleccione" class="w-full"></p-select>
+        <small *ngIf="form.get('metodo')?.invalid && form.get('metodo')?.touched" class="p-error">
+          El método de pago es obligatorio
+        </small>
+      </div>
+
+      <!-- Tipo -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Tipo</label>
+        <p-select [options]="tipos" formControlName="tipo" placeholder="Seleccione" class="w-full"></p-select>
+        <small *ngIf="form.get('tipo')?.invalid && form.get('tipo')?.touched" class="p-error">
+          El tipo de pago es obligatorio
+        </small>
+      </div>
+
+      <!-- Referencia -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Referencia</label>
+        <input pInputText formControlName="referencia" class="w-full" />
+      </div>
+
+      <!-- Proveedor -->
+      <div class="flex flex-col">
+        <label class="font-semibold">Proveedor</label>
+        <input pInputText formControlName="proveedor" class="w-full" />
+      </div>
+
+      <!-- Transacción ID -->
+      <div class="flex flex-col md:col-span-2">
+        <label class="font-semibold">Transacción ID</label>
+        <input pInputText formControlName="transaccion_id" class="w-full" />
+      </div>
+    </div>
+
+
+    <!-- Mostrar QR solo si el método es QR -->
+<div *ngIf="form.get('metodo')?.value === 'qr'" class="flex justify-center mt-4">
+  <qrcode 
+    [qrdata]="stringify(form.value)" 
+    [width]="200" 
+    [errorCorrectionLevel]="'M'">
+  </qrcode>
+</div>
+
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button label="Cancelar" icon="pi pi-times" severity="secondary" (click)="cancelar.emit()"></p-button>
+      <p-button label="Guardar" icon="pi pi-check" type="submit" [disabled]="form.invalid"></p-button>
+    </div>
+  </form>
+</p-dialog>
+
+

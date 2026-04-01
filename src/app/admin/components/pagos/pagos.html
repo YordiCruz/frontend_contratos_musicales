@@ -1,0 +1,74 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="card">
+  <div class="flex justify-content-between mb-3">
+    <h2>Pagos</h2>
+    <!-- Botón PrimeNG -->
+    <p-button 
+      label="Nuevo Pago" 
+      icon="pi pi-plus" 
+      (click)="abrirFormulario()">
+    </p-button>
+  </div>
+
+  <p-table [value]="pagos" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>#</th>
+        <th>Monto</th>
+        <th>Método</th>
+        <th>Tipo</th>
+        <th>Referencia</th>
+        <th>Proveedor</th>
+        <th>Fecha Pago</th>
+        <th>Transacción</th>
+        <th>Estado</th>
+        <th>Registrado Por</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-pago let-i="rowIndex">
+      <tr>
+        <td>{{ i + 1 }}</td>
+        <td>{{ pago.monto | currency }}</td>
+        <td>{{ pago.metodo }}</td>
+        <td>{{ pago.tipo }}</td>
+        <td>{{ pago.referencia || '-' }}</td>
+        <td>{{ pago.proveedor || '-' }}</td>
+        <td>{{ pago.fecha_pago | date:'short' }}</td>
+        <td>{{ pago.transaccion_id || '-' }}</td>
+        <td>{{ pago.estado }}</td>
+        <td>{{ pago.registrado_por?.email || '-' }}</td>
+        <td class="flex gap-2">
+          <!-- Botón editar -->
+          <p-button 
+            icon="pi pi-pencil" 
+            severity="info" 
+            styleClass="p-button-rounded" 
+            (click)="abrirFormulario(pago)">
+          </p-button>
+
+          <!-- Botón confirmar -->
+          <p-button 
+            label="Confirmar" 
+            icon="pi pi-check" 
+            severity="success"
+            (click)="confirmarPago(pago.id_pago)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+
+  <app-pagos-form 
+  [displayForm]="displayForm"
+  [pago]="selectedPago"
+  [contrato]="selectedContrato"
+  (guardar)="pagoGuardado($event)" 
+  (cancelar)="displayForm = false">
+</app-pagos-form>
+
+

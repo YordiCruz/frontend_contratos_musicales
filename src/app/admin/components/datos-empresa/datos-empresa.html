@@ -1,0 +1,142 @@
+<p-dialog 
+  header="Datos de la Empresa" 
+  [(visible)]="displayEmpresaDialog" 
+  [modal]="true" 
+  [style]="{ width: '60vw' }"
+  [breakpoints]="{ '1400px': '70vw', '1200px': '80vw', '960px': '95vw', '640px': '100vw' }"
+  [contentStyle]="{ 'padding': '1rem' }"
+>
+<p-toast position="top-right"></p-toast>
+
+  <form [formGroup]="empresaForm" (ngSubmit)="guardarEmpresa()" class="p-4 space-y-4">
+
+    <!-- Datos básicos -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div>
+    <label class="font-semibold">Nombre Empresa</label>
+    <input pInputText formControlName="nombre_empresa" class="w-full" />
+  </div>
+
+  <div>
+    <label class="font-semibold">Propietario</label>
+    <input pInputText formControlName="propietario" class="w-full" />
+  </div>
+
+  <div>
+    <label class="font-semibold">Teléfono</label>
+    <input pInputText formControlName="telefono" class="w-full" />
+  </div>
+
+  <div>
+    <label class="font-semibold">Email</label>
+    <input pInputText formControlName="email" class="w-full" />
+  </div>
+
+  <div>
+    <label class="font-semibold">Ciudad</label>
+    <input pInputText formControlName="ciudad" class="w-full" />
+  </div>
+</div>
+
+
+    <!-- Mapa para ubicación -->
+  <div class="mt-6 relative w-full">
+  <label class="font-semibold">Ubicación Base</label>
+
+  <!-- Contenedor relativo -->
+  <div class="relative w-full h-[300px]">
+    <google-map
+      height="300px"
+      width="100%"
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions"
+      (mapClick)="onMapClick($event)"
+      class="rounded-lg overflow-hidden shadow-sm"
+    >
+      <map-marker *ngIf="markerPosition" [position]="markerPosition"></map-marker>
+    </google-map>
+
+    <!-- Botón flotante dentro del mapa -->
+    <button
+      #ubicacionBtn
+      class="ubicacion-btn1 absolute bottom-4 right-4 bg-white rounded-full shadow-md p-2 hover:bg-gray-100"
+      (click)="usarMiUbicacion(); ubicacionBtn.blur()"
+    >
+      <i class="pi pi-map-marker text-red-500 !text-[1.5rem]"></i>
+    </button>
+  </div>
+</div>
+
+
+    <!-- Datos de la ubicación -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <div>
+        <label class="font-semibold">Nombre del lugar</label>
+        <input pInputText formControlName="nombre_lugar" readonly class="w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Dirección</label>
+        <input pInputText formControlName="direccion" readonly class="w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Latitud</label>
+        <input pInputText formControlName="latitud" readonly class="w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Longitud</label>
+        <input pInputText formControlName="longitud" readonly class="w-full" />
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 mt-5">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times"
+        severity="secondary"
+        class="w-full sm:w-auto"
+        (click)="displayEmpresaDialog = false">
+      </p-button>
+
+      <p-button 
+        label="Guardar" 
+        icon="pi pi-check"
+        type="submit"
+        class="w-full sm:w-auto">
+      </p-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Panel resumen -->
+<p-card header="Datos de la Empresa" *ngIf="empresa">
+  <p><strong>Nombre_Empresa:</strong> {{ empresa.nombre_empresa }}</p>
+  <p><strong>Nombre_Lugar:</strong> {{ empresa.nombre_lugar }}</p>
+  <p><strong>Propietario:</strong> {{ empresa.propietario }}</p>
+  <p><strong>Teléfono:</strong> {{ empresa.telefono }}</p>
+  <p><strong>Email:</strong> {{ empresa.email }}</p>
+  <p><strong>Dirección:</strong> {{ empresa.direccion }}</p>
+  <p><strong>Ciudad:</strong> {{ empresa.ciudad }}</p>
+  <p>
+    <strong>Ubicación:</strong> {{ empresa.latitud }}, {{ empresa.longitud }}
+  </p>
+
+  <p-button
+    label="Editar"
+    icon="pi pi-pencil"
+    (click)="abrirDialogoEmpresa()"
+  ></p-button>
+</p-card>
+
+<p-card *ngIf="!empresa" header="Registrar Empresa">
+  <p>No hay datos de empresa registrados.</p>
+  <p-button
+    label="Registrar Empresa"
+    icon="pi pi-plus"
+    (click)="abrirDialogoEmpresa()"
+  ></p-button>
+</p-card>

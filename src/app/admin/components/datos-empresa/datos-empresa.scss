@@ -1,0 +1,18 @@
+.ubicacion-btn1 {
+    position: absolute;   /* clave para que se posicione dentro del mapa */
+    bottom: 5rem;         /* siempre a 1rem del borde inferior */
+    right: 0.7rem;          /* siempre a 1rem del borde derecho */
+    z-index: 1000;
+    background-color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+.ubicacion-btn1:hover {
+    background-color: paleturquoise;
+}

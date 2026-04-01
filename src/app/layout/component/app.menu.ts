@@ -25,6 +25,8 @@ export class AppMenu {
                 items: [
                     { label: 'Admin', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] },
                     { label: 'Perfil', icon: 'pi pi-fw pi-home', routerLink: ['/admin/perfil'] },
+                    { label: 'Datos-Empresa', icon: 'pi pi-fw pi-id-card', routerLink: ['/admin/datos-empresa'] },
+
 
                 ]
 

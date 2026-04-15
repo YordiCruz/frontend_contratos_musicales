@@ -26,3 +26,10 @@ export interface ContratosInterface {
   especialidades?: ContratoEspecialidad[];
   pagos?: PagosInterface[];
 }
+
+export interface ContratoConCalculos extends ContratosInterface {
+  monto_total?: number;
+  descuento?: number;
+  precio_base?: number;
+  recargo?: number;
+}

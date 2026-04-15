@@ -26,7 +26,8 @@ import {TabsModule} from 'primeng/tabs';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {ToastModule} from 'primeng/toast';
 import {CardModule} from 'primeng/card';
-
+import {TooltipModule} from 'primeng/tooltip';
+import { Popover } from 'primeng/popover';
 
 
 
@@ -57,7 +58,9 @@ const modulos = [
     TabsModule,
     AutoCompleteModule,
     ToastModule,
-    CardModule
+    CardModule,
+    TooltipModule,
+    Popover
 ]
 
 @NgModule({

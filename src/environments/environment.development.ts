@@ -5,6 +5,8 @@ export const environment = {
 
     url_cliente: "http://localhost:3070/client",
 
+    KeyGoogleMaps: 'AIzaSyAXlTbFbHvDwXzvL39ddGzENoQKc8f9FDw'
+
 
     
 

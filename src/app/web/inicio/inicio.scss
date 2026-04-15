@@ -1,0 +1,120 @@
+.hero {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  background-color: #2a1810;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(30, 20, 15, 0.9) 0%,
+    rgba(30, 20, 15, 0.7) 50%,
+    rgba(30, 20, 15, 0.4) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 700px;
+  padding: 4rem 1.5rem;
+  margin-left: 5%;
+}
+
+@media (min-width: 1024px) {
+  .hero-content {
+    padding: 6rem 2rem;
+    margin-left: 8%;
+  }
+}
+
+.hero-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #c9a227;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-label-line {
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background-color: #c9a227;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #faf8f5;
+  margin: 0 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 4.5rem;
+  }
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #d4d0c8;
+  margin: 0 0 2rem;
+  max-width: 550px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #c9a227;
+  color: #1a1a1a;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #b8922a;
+}
+
+.btn-outline-light {
+  background-color: transparent;
+  color: #faf8f5;
+  border: 1px solid #faf8f5;
+}
+
+.btn-outline-light:hover {
+  background-color: #faf8f5;
+  color: #1a1a1a;
+}

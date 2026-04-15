@@ -184,3 +184,27 @@
   background-color: #f3f4f6; /* gris suave */
   cursor: not-allowed;
 }
+
+
+
+.fecha-completa {
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fecha-parcial {
+  background-color: #f59e0b;
+  color: white;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

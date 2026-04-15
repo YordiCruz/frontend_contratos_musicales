@@ -16,6 +16,7 @@ import { Personas } from './components/personas/personas';
 import { Clientes } from './components/clientes/clientes';
 import { Eventos } from './components/eventos/eventos';
 import { Contratos } from './components/contratos/contratos';
+import { Pagos } from './components/pagos/pagos';
 import { DatosEmpresa } from './components/datos-empresa/datos-empresa';
 
 const routes: Routes = [
@@ -61,6 +62,10 @@ const routes: Routes = [
    {
     path: 'contratos',
     component: Contratos
+  },
+  {
+    path: 'pagos',
+    component: Pagos
   },
 
    {

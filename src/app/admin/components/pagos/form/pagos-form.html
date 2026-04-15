@@ -13,6 +13,15 @@
       <span class="text-sm font-semibold text-gray-600">Datos del Pago</span>
     </p-divider>
 
+    <!-- Resumen del contrato vinculado -->
+<div *ngIf="montoFinal > 0" class="flex flex-col md:col-span-2 surface-100 border-round p-3">
+  <span class="text-sm font-semibold text-color-secondary mb-2">Resumen del contrato</span>
+  <div class="flex gap-4 flex-wrap text-sm">
+    <span><strong>Descuento aplicado:</strong> {{ descuento }}%</span>
+    <span><strong>Total a pagar:</strong> {{ montoFinal | currency:'BOB' }}</span>
+  </div>
+</div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
       <!-- Contrato ID -->
@@ -24,14 +33,24 @@
         </small>
       </div>
 
-      <!-- Monto -->
-      <div class="flex flex-col">
-        <label class="font-semibold">Monto</label>
-        <p-inputNumber formControlName="monto" [min]="0" mode="currency" currency="BOB" locale="es-BO" class="w-full"></p-inputNumber>
-        <small *ngIf="form.get('monto')?.invalid && form.get('monto')?.touched" class="p-error">
-          El monto debe ser mayor o igual a 0
-        </small>
-      </div>
+     <!-- Monto -->
+<div class="flex flex-col">
+  <label class="font-semibold">Monto</label>
+  <p-inputNumber formControlName="monto" [min]="0" mode="currency" currency="BOB" locale="es-BO" class="w-full"></p-inputNumber>
+  <small *ngIf="form.get('monto')?.invalid && form.get('monto')?.touched" class="p-error">
+    El monto debe ser mayor o igual a 0
+  </small>
+</div>
+
+<!-- Descuento -->
+<div class="flex flex-col">
+  <label class="font-semibold">Descuento (%)</label>
+  <input pInputText type="number" formControlName="descuento" class="w-full" />
+  <small *ngIf="form.get('descuento')?.invalid && form.get('descuento')?.touched" class="p-error">
+    El descuento debe ser un número válido
+  </small>
+</div>
+
 
       <!-- Método -->
       <div class="flex flex-col">
